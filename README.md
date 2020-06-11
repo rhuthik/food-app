@@ -1,4 +1,7 @@
 # food-app
+     A new way to cook your fav dish           
+   In this period of unease when people are looking for various hobbies to distract themselves from the tensions of daily life during a pandemic, anybody with a social media account can observe the increase in the number of people dabbling in the culinary arts. The application that we would like to present seeks to encourage and simplify such endeavours. Moreover, even after this era of the pandemic, this application's relevance does not fade away with time. 
+
 	New app to cook your fav dish instantly.
 
 In this period of unease when people are looking for various hobbies to distract themselves from the tensions of daily life during a pandemic, anybody with a social media account can observe the increase in the number of people dabbling in the culinary arts. The application that we would like to present seeks to encourage and simplify such endeavours. Moreover, even after this era of the pandemic, this application's relevance does not fade away with time. 
