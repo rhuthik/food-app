@@ -4,7 +4,7 @@ import json
 
 db.create_all()
 
-with open('train.json') as json_file:
+with open('foodapp/static/train.json') as json_file:
     data = json.loads(json_file.read())
     for recipe in data:
         rec = Recipe(name=recipe['cuisine'], procedure="lorem ipsum")
