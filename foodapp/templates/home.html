@@ -11,37 +11,43 @@
     <title>Home</title>
   </head>
   <body>
-    <h2><a href="{{ url_for('add') }}"class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add New Recipe</a></h2>
 
     <div class="container">
-  <div class="row">
-    <div class="col-sm">
-    {% for recipe in recipes %}
-    <div class="card" style="width: 18em;">
-    <img class="card-img-top" src="static/images/{{ recipe.name }}.jpg" alt="Card image cap">
-    <div class="card-body">
-    <h4 class="card-title"><div class="p-3 mb-2 bg-secondary text-white">{{ recipe.name }}</div></h4>
-    <p class="card-text">
-    	<hr>
-    		 <h5>
-                Ingredients :
-             </h5>
-             <p> 
-                {% for ing in recipe.ingredients %}
-                    {{ ing.name }}, 
-                {% endfor %}
-            </p>
-  </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">{{ recipe.procedure }}</li>
-  </ul>
-  <div class="card-body">
-    <a href="#" class="card-link">Card link</a>
-  </div>
-</div>
-<br>
-    {% endfor %}
-</div>
+      <div class="row">
+        <div class="col-sm">
+          <h2><a href="{{ url_for('add') }}"class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add New Recipe</a></h2>
+          <div class="card-columns">
+          {% for recipe in recipes %}
+          <div class="card">
+            <img class="card-img-top" src="static/images/Choor.jpg" alt="Card image cap">
+            <div class="card-body">
+              <h4 class="card-title"><div class="p-3 mb-2 bg-secondary text-white">{{ recipe.name }}</div></h4>
+              <p class="card-text">
+              	<hr>
+              		 <h5>
+                      Ingredients :
+                   </h5>
+                   <p> 
+                      {% for ing in recipe.ingredients %}
+                          {{ ing.name }}, 
+                      {% endfor %}
+                  </p>
+              </p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">{{ recipe.procedure }}</li>
+            </ul>
+            <div class="card-body">
+              <a href="{{ url_for('delete', id=recipe.id) }}" class="card-link">Delete</a>
+            </div>
+          </div>
+          <br>
+          {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
 <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
