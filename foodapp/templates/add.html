@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Add New</title>
+</head>
+
+<body>
+    <div style="text-align: center;">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <br><br>
+            Name of the Recipe : {{ form.recipe_name() }} <br><br>
+
+            Rice : <input type="checkbox" value="1" name="ingredient" > 
+            Wheat : <input type="checkbox" value="2" name="ingredient" > 
+            Chilly : <input type="checkbox" value="3" name="ingredient" > 
+            Turmeric : <input type="checkbox" value="4" name="ingredient" > <br><br>
+
+            Procedure : {{ form.procedure() }} <br><br>
+
+            {{ form.submit() }}
+
+        </form>
+    </div>
+</body>
+
+</html>
