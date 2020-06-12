@@ -10,7 +10,7 @@ This application is different from other recipe applications because of the inte
 # contributers
 
 Sivaprasad - sivaprasad2000
-Ivin kuriakose - ivin-3-69
+Ivin Kuriakose - ivin-3-69
 Pranoy Chithra - RayChithra
 Rhuthik -rhuthik
 Vivek - vivek-r-2000
