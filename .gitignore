@@ -2,6 +2,5 @@
 /include
 /lib
 /foodapp/__pycache__
-flaskmain.pyc
-forms.pyc
+*.pyc
 /foodapp/test.db
