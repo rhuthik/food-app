@@ -41,7 +41,7 @@ This application is different from other recipe applications because of the inte
 
 ```bash
 # step 1: Open terminal in the master directory and run the python file 'seed.py'
-	python test.py
+	python seed.py
 # step 2: Now set the location of flask application
 	export FLASK_APP=flaskmain.py
 # step 3: Now run the application
