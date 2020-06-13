@@ -35,7 +35,23 @@ This application is different from other recipe applications because of the inte
 	# pip installs all the packages specified in the requirement.txt file
  python3 flaskmain.py
 	# runs the flaskmain.py file which takes us to the website.
-```	
+```
+
+# Instructions for running the web application
+
+```bash
+# step 1: Open terminal in the master directory and run the python file 'seed.py'
+	python seed.py
+# step 2: Now set the location of flask application
+	export FLASK_APP=flaskmain.py
+# step 3: Now run the application
+	flask run
+# instead of step 2 and step 3 running the python app with the following command will also work
+	python flaskmain.py
+# visit http://localhost:5000/ or http://127.0.0.1:5000/ to see the application running
+		
+```
+
 # contributers
 
 * Sivaprasad - sivaprasad2000
