@@ -1,29 +1,57 @@
-<!DOCTYPE html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<head>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
     <title>Home</title>
-</head>
+  </head>
+  <body>
 
-<body>
-    <h2></h2><a href="{{ url_for('add') }}">Add New Recipe</a></h2>
-
-    {% for recipe in recipes %}
-        <div style="border-style: solid; padding: 20px; margin: 20px;">
-            <h1>{{ recipe.name }}</h1>  <br><br>
-            <a href="{{ url_for('delete', id=recipe.id) }}">Delete</a>
-
-            <h3>
-                Ingredients : 
-                {% for ing in recipe.ingredients %}
-                    {{ ing.name }}, 
-                {% endfor %}
-            </h3>
-            <br><br>
-            <p>
-                Procedure : {{ recipe.procedure }}
-            </p>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+          <h2><a href="{{ url_for('add') }}"class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Add New Recipe</a></h2>
+          <div class="card-columns">
+          {% for recipe in recipes %}
+          <div class="card">
+            <img class="card-img-top" src="static/images/Choor.jpg" alt="Card image cap">
+            <div class="card-body">
+              <h4 class="card-title"><div class="p-3 mb-2 bg-secondary text-white">{{ recipe.name }}</div></h4>
+              <p class="card-text">
+              	<hr>
+              		 <h5>
+                      Ingredients :
+                   </h5>
+                   <p> 
+                      {% for ing in recipe.ingredients %}
+                          {{ ing.name }}, 
+                      {% endfor %}
+                  </p>
+              </p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">{{ recipe.procedure }}</li>
+            </ul>
+            <div class="card-body">
+              <a href="{{ url_for('delete', id=recipe.id) }}" class="card-link">Delete</a>
+            </div>
+          </div>
+          <br>
+          {% endfor %}
+          </div>
         </div>
-    {% endfor %}
-</body>
+      </div>
+    </div>
 
+<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
 </html>
