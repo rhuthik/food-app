@@ -4,3 +4,4 @@
 /foodapp/__pycache__
 *.pyc
 /foodapp/test.db
+/venv
