@@ -3,8 +3,8 @@ from foodapp import db
 from foodapp.models import Recipe, Ingredient
 import json
 
-if len(Recipe.query.all()) == 0:
-  db.create_all()
+db.drop_all()
+db.create_all()
 
 with open('seed-resource/train.json') as json_file:
     data = json.loads(json_file.read())
