@@ -1,7 +1,18 @@
-from flask import Flask, render_template, url_for, redirect, flash, request
+from flask import Flask, render_template, url_for, redirect, flash, request, jsonify
 from foodapp import app, bcrypt, db
 from foodapp.forms import RegistrationForm, LoginForm, AddRecipe
 from foodapp.models import User, Recipe, Ingredient
+
+def filter(string) :
+    shortList = []
+    counter = 0
+    for i in Ingredient.query.all() :
+        if string.capitalize() in (i.name).capitalize() :
+            counter += 1
+            shortList.append(i.name)
+        if counter == 10 :
+            break
+    return shortList
 
 @app.route("/", methods=['GET', 'POST'])
 def reg():
@@ -48,4 +59,13 @@ def delete(id):
 
     return redirect(url_for('home'))
 
+@app.route('/process', methods=['POST', 'GET'])
+def process() :
+    string = request.form['search']
+    print(string)
+    if len(string) > 0 :
+        ans = filter(string)
+    else :
+        ans = []
+    return jsonify({ "result" : ans })
 

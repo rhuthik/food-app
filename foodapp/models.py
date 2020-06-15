@@ -1,3 +1,4 @@
+from sqlalchemy.orm import relationship
 from foodapp import db
 
 class User(db.Model):
@@ -17,11 +18,19 @@ theTable = db.Table('theTab',
 )
 
 class Ingredient(db.Model):
+    __searchable__ = ['name']
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    theTable = db.relationship('Recipe', secondary=theTable, backref=db.backref('ingredients', lazy='dynamic'))
+    recipes = db.relationship('Recipe', secondary=theTable, back_populates='ingredients')
+
+    def __repr__(self):
+        return f"('{self.name}')"
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     procedure = db.Column(db.Text, nullable=False)
+    ingredients = db.relationship('Ingredient', secondary=theTable, back_populates='recipes')
+
+    def __repr__(self):
+        return f"('{self.name}')"
