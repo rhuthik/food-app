@@ -2,7 +2,6 @@
   
   {% block TITLE %}
   <title>Home</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script>
   
   <link rel="stylesheet" href="{{ url_for('static', filename='css/searchbox.css') }}">
   <script>
@@ -11,7 +10,7 @@
           req = $.ajax({
             data : { 'search' : $('#searchbox').val() },
             type : 'POST',
-            url : '{{ url_for('ingsearch') }}'
+            url : '{{ url_for('ingredientsearch') }}'
           });
             
           req.done(function (data){

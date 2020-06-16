@@ -61,7 +61,7 @@ def delete(id):
 
     return redirect(url_for('home'))
 
-@app.route('/ingsearch', methods=['POST', 'GET'])
+@app.route('/ingredientsearch', methods=['POST', 'GET'])
 def ingsearch() :
     string = request.form['search']
     print(string)
