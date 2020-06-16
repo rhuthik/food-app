@@ -1,7 +1,26 @@
 {% extends "base.html" %}
   
   {% block TITLE %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script>
   <title>Home</title>
+  <script>
+    $(document).ready(function(){
+      $('#searchbox').keyup(function(){
+        req = $.ajax({
+          data : { dish : $('#searchbox').val() },
+          type : 'POST', 
+          url : '/dish' 
+        }); 
+
+        req.done(function (data){
+          $('#cont').html('');
+          for (var i=0; i<data['result'].length; i++){
+            $('#cont').append('<button>' + data['result'][i] + '</button>' );
+          }
+        });
+      });    
+    });
+  </script>
   {% endblock %}
   
   {% block content%}
