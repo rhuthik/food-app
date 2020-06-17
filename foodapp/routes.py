@@ -5,15 +5,14 @@ from foodapp.models import User, Recipe, Ingredient
 
 def filter(string) :
     shortList = []
-    search = "%{}%".format(dish)
+    search = "%{}%".format(string)
     count = 0
-    for ing in Ingredient.query.filter(Ingredient.name.like(search)).all():
+    for ing in Ingredient.query.filter(Ingredient.name.like(search)).all() :
         count += 1
         shortList.append(ing.name)
         
         if count == 10 :
             break
-
     return shortList
 
 def searching_by_dish_name(dish) :
@@ -25,7 +24,6 @@ def searching_by_dish_name(dish) :
         shortList.append(i.name)
         if count == 10 :
             break
-
     return shortList
 
 @app.route("/", methods=['GET', 'POST'])
@@ -73,8 +71,8 @@ def delete(id):
 
     return redirect(url_for('home'))
 
-@app.route('/process', methods=['POST', 'GET'])
-def process() :
+@app.route('/ingredientsearch', methods=['POST', 'GET'])
+def ingredientsearch() :
     string = request.form['search']
     print(string)
     if len(string) > 0 :

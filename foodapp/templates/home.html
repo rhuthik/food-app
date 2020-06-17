@@ -5,9 +5,9 @@
   <title>Home</title>
   <script>
     $(document).ready(function(){
-      $('#searchbox').keyup(function(){
+      $('#searchbox1').keyup(function(){
         req = $.ajax({
-          data : { dish : $('#searchbox').val() },
+          data : { dish : $('#searchbox1').val() },
           type : 'POST', 
           url : '/dish' 
         }); 
@@ -23,8 +23,39 @@
   </script>
   {% endblock %}
   
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/searchbox.css') }}">
+  <script>
+    $(document).ready(function(){
+        $('#searchbox').keyup(function(){
+          req = $.ajax({
+            data : { 'search' : $('#searchbox').val() },
+            type : 'POST',
+            url : '{{ url_for('ingredientsearch') }}'
+          });
+            
+          req.done(function (data){
+            $('#cont').html('');
+            for (var i=0; i<data['result'].length; i++){
+              $('#cont').append('<button>' + data['result'][i] + '</button>' );
+            }
+          });
+        });    
+      });
+  </script>
+
+  {% endblock %}
+
   {% block content%}
   <br>
+
+  <div class="dropdown">
+    <input class="dropbtn" id="searchbox" placeholder="Search">
+    <div class="dropdown-content" id="cont">
+        
+    </div>
+  </div>
+
+  <br><br>
   <div class="card-columns">
   {% for recipe in recipes %}
   <div class="card">
