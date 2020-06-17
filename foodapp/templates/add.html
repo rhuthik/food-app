@@ -4,21 +4,21 @@
 {% endblock %}
 
 {% block content %}
-    <div style="text-align: center;">
+
         <form method="POST">
+            <div class="form-group">
             {{ form.hidden_tag() }}
             <br><br>
-            Name of the Recipe : {{ form.recipe_name() }} <br><br>
+            Name of the Recipe : {{ form.recipe_name(class="form-control") }} <br><br>
 
             Rice : <input type="checkbox" value="1" name="ingredient" > 
             Wheat : <input type="checkbox" value="2" name="ingredient" > 
             Chilly : <input type="checkbox" value="3" name="ingredient" > 
             Turmeric : <input type="checkbox" value="4" name="ingredient" > <br><br>
 
-            Procedure : {{ form.procedure() }} <br><br>
+            Procedure : {{ form.procedure(class="form-control") }} <br><br>
 
-            {{ form.submit() }}
-
+            {{ form.submit( class="btn btn-secondary btn-lg btn-block" ) }}
+        </div>
         </form>
-    </div>
 {% endblock %}
