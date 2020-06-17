@@ -14,32 +14,20 @@ def filterIngredients(string) :
 
 # ------------- For filtering the recipes corresponding to ingredients selected -------------
 
-def findRecipe(ingred) :
-    subset = set()
+# Here the list of ingredients selected by the user is passed into the function
 
-    for i in Ingredient.query.filter_by(name=ingred.name).all() :
-        global result
-        for p in i.recipes :
-            subset.add(p)
-        
-    result = result.intersection(subset)
+def findRecipe(ingredients) :
+    result = set()
 
-# -------------------------------------------------------------------------------------------
+    for i in Recipe.query.all() :
+        result.add(i)
 
-
-search = [Ingredient.query.get(5)]
-
-result = set()
-
-
-for i in Recipe.query.all() :
-    result.add(i)
-
-for i in search :
-    findRecipe(i)
-
-
-for i in result :
-    print(f"{i.name} ")
-
+    for ing in ingredients :
+        subset = set()
+        for i in Ingredient.query.filter_by(name=ing.name).all() :
+            for p in i.recipes :
+                subset.add(p)
+        result = result.intersection(subset)
+    
+    return result
 
