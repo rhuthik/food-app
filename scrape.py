@@ -1,5 +1,9 @@
+from bs4 import BeautifulSoup 
 import requests
-import lxml.html
+with open('test.html') as html_file:
+    soup =BeautifulSoup(html_file, 'lxml')
 
-html = requests.get("https://www.bbcgoodfood.com/recipes/collection/easy")
-doc = lxml.html.fromstring(html.content)
+article = soup.find('article')
+#print(article.prettify())
+headline = article.h3.a.text
+print(headline)
