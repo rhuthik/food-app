@@ -4,6 +4,7 @@ from foodapp.forms import RegistrationForm, LoginForm, AddRecipe
 from foodapp.models import User, Recipe, Ingredient
 from foodapp.utils import searching_by_dish_name
 
+
 @app.route("/", methods=['GET', 'POST'])
 def reg():
     form = RegistrationForm()

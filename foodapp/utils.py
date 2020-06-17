@@ -3,12 +3,18 @@ from foodapp.models import *
 
 # ------------ For shortlisting the ingredients based on user's search query ----------------
 
-def filterIngredients(string) :
-    filtered_list = []
-    for i in Ingredient.query.all() :
-        if (i.name).find(string) != -1 :
-            filtered_list.append(i)
-    return filtered_list
+def filter(string) :
+    shortList = []
+    search = "%{}%".format(string)
+    count = 0
+    for ing in Ingredient.query.filter(Ingredient.name.like(search)).all() :
+        count += 1
+        shortList.append(ing.name)
+        
+        if count == 10 :
+            break
+    
+    return shortList
 
 # -------------------------------------------------------------------------------------------
 
