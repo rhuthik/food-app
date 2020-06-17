@@ -2,19 +2,8 @@ from flask import Flask, render_template, url_for, redirect, flash, request, jso
 from foodapp import app, bcrypt, db
 from foodapp.forms import RegistrationForm, LoginForm, AddRecipe
 from foodapp.models import User, Recipe, Ingredient
+from foodapp.utils import filter
 
-def filter(string) :
-    shortList = []
-    search = "%{}%".format(string)
-    count = 0
-    for ing in Ingredient.query.filter(Ingredient.name.like(search)).all() :
-        count += 1
-        shortList.append(ing.name)
-        
-        if count == 10 :
-            break
-    
-    return shortList
 
 @app.route("/", methods=['GET', 'POST'])
 def reg():
