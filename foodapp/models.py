@@ -30,6 +30,8 @@ class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     procedure = db.Column(db.Text, nullable=False)
+    upvotes = db.Column(db.Integer, nullable = True)
+    downvotes = db.Column(db.Integer, nullable = True)
     ingredients = db.relationship('Ingredient', secondary=theTable, back_populates='recipes')
 
     def __repr__(self):

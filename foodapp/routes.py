@@ -69,3 +69,16 @@ def process() :
         ans = []
     return jsonify({ "result" : ans })
 
+@app.route("/upvote/<id>", methods=['GET', 'POST'])
+def upvote_incr(id):
+    recipe = Recipe.query.get(id)
+    recipe.upvotes = recipe.upvotes + 1
+    db.session.commit()
+    return render_template(url_for('home'))
+
+@app.route("/downvote/<id>", methods=['GET', 'POST'])
+def downvote_incr(id):
+    recipe = Recipe.query.get(id)
+    recipe.downvotes = recipe.downvotes + 1
+    db.session.commit()
+    return render_template(url_for('home'))
