@@ -31,3 +31,14 @@ def findRecipe(ingredients) :
     
     return result
 
+def searching_by_dish_name(dish) :
+    shortList = []
+    search = "%{}%".format(dish)
+    count = 0
+    for i in Recipe.query.filter(Recipe.name.like(search)).all():
+        count += 1
+        shortList.append(i.name)
+        if count == 10 :
+            break
+    return shortList
+
