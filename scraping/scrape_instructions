@@ -1,0 +1,7 @@
+Install beautifulsoup
+    pip install beautifulsoup4
+Install requests
+    pip install requests
+Run the scrape2.py
+    pyhton3 scrape2.py
+Run it once to get the excel/csv file
