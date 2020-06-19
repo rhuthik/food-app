@@ -1,37 +1,42 @@
 {% extends "base.html" %}
-  
-  {% block TITLE %}
-  <title>Home</title>
-  {% endblock %}
-  
-  {% block content%}
-  <br>
-  <div class="card-columns">
-  {% for recipe in recipes %}
-  <div class="card">
-    <img class="card-img-top" src="static/images/Choor.jpg" alt="Card image cap">
-    <div class="card-body">
-      <h4 class="card-title"><div class="p-3 mb-2 bg-secondary text-white">{{ recipe.name }}</div></h4>
-      <p class="card-text">
-      	<hr>
-      		 <h5>
-              Ingredients :
-           </h5>
-           <p> 
-              {% for ing in recipe.ingredients %}
-                  {{ ing.name }}, 
-              {% endfor %}
-          </p>
-      </p>
-    </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">{{ recipe.procedure }}</li>
-    </ul>
-    <div class="card-body">
-      <a href="{{ url_for('delete', id=recipe.id) }}" class="card-link">Delete</a>
-    </div>
-  </div>
-  <br>
-  {% endfor %}
-  </div>
-  {% endblock %}
+      
+    {% block TITLE %}
+        <title>Home</title>
+    {% endblock %}
+      
+    {% block content%}
+        <br>
+        <div class="card-columns">
+            {% for recipe in recipes %}
+                <div class="card">
+                    <img class="card-img-top" src="static/images/Choor.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h4 class="card-title"><div class="p-3 mb-2 bg-secondary text-white">{{ recipe.name }}</div></h4>
+                        <p class="card-text">
+          	            <hr>
+          		        <h5>
+                            Ingredients :
+                        </h5>
+                        <p> 
+                        {% for ing in recipe.ingredients %}
+                            {{ ing.name }}, 
+                        {% endfor %}
+                        </p>
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">{{ recipe.procedure }}</li>
+                    </ul>
+                    <div class="card-body">
+                        <a href="{{ url_for('delete', id=recipe.id) }}" class="card-link">Delete</a>
+                    </div>
+                    <div class="card-body">
+                        <a href="{{ url_for('upvote', id=recipe.id) }}" class="card-link">
+                        {{ recipe.upvotes }} Upvotes</a>
+                        <a href="{{ url_for('downvote', id=recipe.id) }}" class="card-link">
+                        {{ recipe.downvotes }} Downvotes</a>
+                </div>
+                <br>
+            {% endfor %}
+      </div>
+      {% endblock %}
