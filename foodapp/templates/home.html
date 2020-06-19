@@ -35,6 +35,7 @@
                         {{ recipe.upvotes }} Upvotes</a>
                         <a href="{{ url_for('downvote', id=recipe.id) }}" class="card-link">
                         {{ recipe.downvotes }} Downvotes</a>
+                    </div>
                 </div>
                 <br>
             {% endfor %}
