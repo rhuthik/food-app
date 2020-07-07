@@ -1,4 +1,3 @@
-
 from foodapp import db
 from foodapp.models import Recipe, Ingredient
 import json
@@ -13,8 +12,15 @@ with open('seed-resource/train.json') as json_file:
         db.session.add(rec)
         db.session.commit()
         for ing in recipe['ingredients']:
-            ingre = Ingredient(name=ing)
-            db.session.add(ingre)
-            db.session.commit()
-            rec.ingredients.append(ingre)
-            db.session.commit()
+
+            ingList = Ingredient.query.filter_by(name=ing).all()
+
+            if len(ingList) == 1 :
+                rec.ingredients.append(ingList[0])
+            
+            else :
+                ingre = Ingredient(name=ing)
+                db.session.add(ingre)
+                db.session.commit()
+                rec.ingredients.append(ingre)
+                db.session.commit()

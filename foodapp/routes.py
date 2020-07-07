@@ -1,7 +1,9 @@
-from flask import Flask, render_template, url_for, redirect, flash, request
+from flask import Flask, render_template, url_for, redirect, flash, request, jsonify
 from foodapp import app, bcrypt, db
 from foodapp.forms import RegistrationForm, LoginForm, AddRecipe
 from foodapp.models import User, Recipe, Ingredient
+from foodapp.utils import searching_by_dish_name
+
 
 @app.route("/", methods=['GET', 'POST'])
 def reg():
@@ -48,4 +50,22 @@ def delete(id):
 
     return redirect(url_for('home'))
 
+@app.route('/ingredientsearch', methods=['POST', 'GET'])
+def ingredientsearch() :
+    string = request.form['search']
+    print(string)
+    if len(string) > 0 :
+        ans = filter(string)
+    else :
+        ans = []
+    return jsonify({ "result" : ans })
 
+@app.route('/dish', methods=['POST'])
+def search_by_dish():
+    dish = request.form['dish'] 
+    print(dish)
+    if len(dish) > 0 :
+        ans = searching_by_dish_name(dish)
+    else :
+        ans = []
+    return jsonify({'dish' : ans}) 
