@@ -6,35 +6,51 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/searchbox.css') }}">
   <script>
     $(document).ready(function(){
-        $('#searchbox').keyup(function(){
+        $('#searchbox_ing').keyup(function(){
           req = $.ajax({
-            data : { 'search' : $('#searchbox').val() },
+            data : { 'search' : $('#searchbox_ing').val() },
             type : 'POST',
             url : '{{ url_for('ingredientsearch') }}'
           });
             
           req.done(function (data){
-            $('#cont').html('');
+            $('#cont_ing').html('');
             for (var i=0; i<data['result'].length; i++){
-              $('#cont').append('<button>' + data['result'][i] + '</button>' );
+              $('#cont_ing').append('<button type="button" class="btn btn-light">' + data['result'][i] + '</button>' );
             }
           });
         });    
       });
   </script>
 
+<script>
+  $(document).ready(function(){
+      $('#searchbox_rec').keyup(function(){
+        req = $.ajax({
+          data : { 'search' : $('#searchbox_rec').val() },
+          type : 'POST',
+          url : '{{ url_for('recipesearch') }}'
+        });
+          
+        req.done(function (data){
+          $('#cont_rec').html('');
+          for (var i=0; i<data['result'].length; i++){
+            $('#cont_rec').append('<button type="button"  class="btn btn-light">' + data['result'][i] + '</button>' );
+          }
+        });
+      });    
+    });
+</script>
+
   {% endblock %}
 
   {% block content%}
   <br>
-
   <div class="dropdown">
-    <input class="dropbtn" id="searchbox" placeholder="Search">
-    <div class="dropdown-content" id="cont">
-        
-    </div>
+    <input class="form-control mr-sm-2" type="search" placeholder="Search By ingredients" id="searchbox_ing" aria-label="Search">
+    <div class="dropdown-content" id="cont_ing">
+      </div>
   </div>
-
   <br><br>
   <div class="card-columns">
   {% for recipe in recipes %}
