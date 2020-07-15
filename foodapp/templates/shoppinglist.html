@@ -1,122 +1,29 @@
 {% extends "base.html" %};
 
 {% block TITLE %}
-    <title> Shopping list </title>
+    <title> Shopping cart </title>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>TODO List</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link href="https://fonts.googleapis.com/css?family=Hind&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/a81368914c.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-       
-        
-        h1 {
-
-            font-size: 3rem;
-            font-weight: 50;
-            text-align: center;
-            margin: 1rem 0 3rem; 
-            font-family: 'Hind', sans-serif;
-        }
-        
-        .title{
-            color: lime;
-            text-transform: uppercase;
-            font-weight: 800;
-        }
-        
-        .inputDiv{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .input{
-            padding: 0.5rem 1rem;
-            outline: none;
-            border: 2px solid rgb(233, 233, 233);
-            height: 50px;
-            border-radius: 20px;
-            width: 350px;
-            margin: 0.25rem;
-            transition: .5s;
-            font-size: 1.15rem;
-        }
-        
-        .add{
-            outline: none;
-            border: none;
-            height: 50px;
-            border-radius: 25px;
-            width: 50px;
-            background-color: lime;
-            color: rgb(255, 255, 255);
-            cursor: pointer;
-            transition: .5s;
-            margin: 0.25rem;
-        }
-        
-        .add:hover{
-            opacity: 0.7;
-        }
-        
-        }
-        
-        .item{
-            padding: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .item_input{
-            background: none;
-            outline: none;
-            border: none;
-            color: rgb(12, 12, 12);
-            font-size: 1.4rem;
-            width: 245px;
-        }
-        
-        .edit{
-            background: none;
-            outline: none;
-            border: none;
-            color: lime;
-            font-size: 1.4rem;
-            font-family: 'Hind', sans-serif;
-            margin: 0 0.5rem;
-            cursor: pointer;
-        }
-        
-        .remove{
-            background: none;
-            outline: none;
-            border: none;
-            color: #E00;
-            font-size: 1.4rem;
-            font-family: 'Hind', sans-serif;
-            cursor: pointer;
-        }
-        </style>
 {% endblock %}
 
 {% block content %}
-<h1><span class="title">Todo</span>List</h1>
-    <div class="inputDiv">
-    	   <input type="text" class="input" placeholder="What Do You Want to Do...">
-    	   <button class="add"><i class="fas fa-plus"></i></button>
+<br>
+<h1 class="text-center">Shopping Cart</h1>
+<br>
+    <div class="input-group input-group-lg px-5 pb-2">
+           <input type="text" class="input form-control" placeholder="Add item" >
+           <div class="input-group-append">
+           <button class="add btn-primary btn"><i class="fas fa-plus"></i></button>
+        </div>
     </div>
     <div class="container">
     </div>
     <script>
-    const container = document.querySelector('.container');
+     const container = document.querySelector('.container');
 var inputValue = document.querySelector('.input');
 const add = document.querySelector('.add');
 
@@ -135,30 +42,57 @@ class item{
 	}
     createItem(name){
     	var itemBox = document.createElement('div');
-        itemBox.classList.add('item');
-
+        itemBox.classList.add('pb-1');
+        itemBox.classList.add('input-group');
+        itemBox.classList.add('px-5');
+        
+        
     	var input = document.createElement('input');
     	input.type = "text";
     	input.disabled = true;
     	input.value = name;
-    	input.classList.add('item_input');
+        input.classList.add('item_input');
+        input.classList.add('form-control');
+        input.classList.add('bg-light');
+        input.classList.add('border-0');
+
+        var prep1 = document.createElement('div');
+        prep1.classList.add('input-group-text');
+        prep1.classList.add('bg-light');
+        prep1.classList.add('border-0');
+
+        var prep2 = document.createElement('div');
+        prep2.classList.add('input-group-prepend');
+        
+        var cb=document.createElement('input');
+        cb.type = "checkbox";
+
+        var Append = document.createElement('div');
+        Append.classList.add('input-group-append');
+        
 
     	var edit = document.createElement('button');
-    	edit.classList.add('edit');
-    	edit.innerHTML = "EDIT";
-    	edit.addEventListener('click', () => this.edit(input, name));
-
+        edit.classList.add('edit');
+        edit.classList.add('btn-secondary');
+        edit.classList.add('btn');
+        edit.innerHTML = "<i class=\"fas fa-edit\"></i>";
+        edit.addEventListener('click', () => this.edit(input, name));
+        
     	var remove = document.createElement('button');
-    	remove.classList.add('remove');
-    	remove.innerHTML = "REMOVE";
-    	remove.addEventListener('click', () => this.remove(itemBox, name));
-
+        remove.classList.add('remove');
+        remove.classList.add('btn-danger');
+        remove.classList.add('btn');
+        remove.innerHTML = "<i class=\"fas fa-trash\"></i>";
+        remove.addEventListener('click', () => this.remove(itemBox, name));
+        
+        prep1.appendChild(cb);
+        prep2.appendChild(prep1);
+        Append.appendChild(edit);
+        Append.appendChild(remove);
     	container.appendChild(itemBox);
-
+        itemBox.appendChild(prep2);
         itemBox.appendChild(input);
-        itemBox.appendChild(edit);
-        itemBox.appendChild(remove);
-
+        itemBox.appendChild(Append);
     }
 
     edit(input, name){
