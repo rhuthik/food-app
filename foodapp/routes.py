@@ -73,16 +73,10 @@ def search_by_dish():
 @app.route('/recipe', methods=['POST', 'GET'])
 def recipeFiltering() :
     recipes = Recipe.query.all()
-    return render_template('recipe.html', recipes=recipes)
+    return render_template('recipe.html')
 
 @app.route('/filter', methods=['POST', 'GET'])
 def filteredrecipe() :
     ing_list = request.form.getlist('info[]')
     recipe_list = findRecipe(ing_list)
-    ans = []
-    for rec in recipe_list :
-        ingr_temp = []
-        for i in rec.ingredients :
-            ingr_temp.append(i.name)
-        ans.append( {'name' : rec.name, 'ingredients' : ingr_temp, 'procedure' : rec.procedure} )
-    return jsonify({'result' : ans})
+    return jsonify({'result' : render_template('recipelist.html', recipes=recipe_list)})

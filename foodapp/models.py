@@ -12,8 +12,8 @@ class User(db.Model):
         return f"User('{self.username}', '{self.email}', '{self.propic}')"
 
 theTable = db.Table('theTab',
-    db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id'), primary_key=True),
-    db.Column('ingred_id', db.Integer, db.ForeignKey('ingredient.id'), primary_key=True)
+    db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id')),
+    db.Column('ingred_id', db.Integer, db.ForeignKey('ingredient.id'))
 
 )
 

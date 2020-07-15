@@ -35,6 +35,8 @@ def findRecipe(ingredients) :
                 subset.add(p)
         result = result.intersection(subset)
     
+    print(result)
+
     return result
 
 def searching_by_dish_name(dish) :

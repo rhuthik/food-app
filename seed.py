@@ -17,10 +17,11 @@ with open('seed-resource/train.json') as json_file:
 
             if len(ingList) == 1 :
                 rec.ingredients.append(ingList[0])
+                ingList[0].recipes.append(rec)
             
             else :
                 ingre = Ingredient(name=ing)
                 db.session.add(ingre)
-                db.session.commit()
+                ingre.recipes.append(rec)
                 rec.ingredients.append(ingre)
                 db.session.commit()
