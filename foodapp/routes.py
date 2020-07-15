@@ -77,10 +77,12 @@ def recipeFiltering() :
 
 @app.route('/filter', methods=['POST', 'GET'])
 def filteredrecipe() :
-    ing_list = request.form['ing_list']
+    ing_list = request.form.getlist('info[]')
     recipe_list = findRecipe(ing_list)
-    
     ans = []
     for rec in recipe_list :
-        ans.append( {'name' : rec.name, 'ingredients' : rec.ingredients, 'procedure' : rec.procedure} )
+        ingr_temp = []
+        for i in rec.ingredients :
+            ingr_temp.append(i.name)
+        ans.append( {'name' : rec.name, 'ingredients' : ingr_temp, 'procedure' : rec.procedure} )
     return jsonify({'result' : ans})

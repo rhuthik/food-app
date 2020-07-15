@@ -27,14 +27,10 @@
     var ingredients_list = [];
 
     function recipeFilter(){
-        req = $.ajax({
-            data : { 'ing_list' : ingredients_list },
-            type : 'POST',
-            url : '{{ url_for('filteredrecipe') }}'
-        });
+        requ = $.post( "{{ url_for('filteredrecipe') }}", { 'info[]': ingredients_list } );
 
-        req.done(function (data){
-            
+        requ.done(function (data){
+            console.log(data);
         });
     }
 
