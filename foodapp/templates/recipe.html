@@ -33,6 +33,7 @@
             console.log(data);
         });
     }
+    
 
     $(document).ready(function(){
         $('#searchbox_ing').keyup(function(){
@@ -47,11 +48,16 @@
             for (var i=0; i<data['result'].length; i++){
               var btn = document.createElement("BUTTON");
               btn.innerHTML = data['result'][i];
+              
               btn.addEventListener('click', function() {
                   if(!ingredients_list.includes(this.innerHTML)){
                     ingredients_list.push(this.innerHTML);
                     console.log(ingredients_list);
 
+                    $('#filterlist').html('');
+                    for(var j=0; j<ingredients_list.length; j++){
+                      $('#filterlist').append('<span class="card bg-primary"><div class="card-body text-center"><p class="card-text">' + ingredients_list[j] + ' <a onclick="">X</a></p></div></span>');
+                    }
                     recipeFilter();
                   }
               });
@@ -73,6 +79,10 @@
     <div class="dropdown-content" id="cont_ing">
         
     </div>
+  </div>
+
+  <div id="filterlist" class="row">
+
   </div>
 
   <br><br>
