@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, redirect, flash, request, jso
 from foodapp import app, bcrypt, db
 from foodapp.forms import RegistrationForm, LoginForm, AddRecipe
 from foodapp.models import User, Recipe, Ingredient
-from foodapp.utils import searching_by_dish_name
+from foodapp.utils import searching_by_dish_name, filter
 
 
 @app.route("/", methods=['GET', 'POST'])
