@@ -30,7 +30,7 @@ def findRecipe(ingredients) :
 
     for ing in ingredients :
         subset = set()
-        for i in Ingredient.query.filter_by(name=ing.name).all() :
+        for i in Ingredient.query.filter_by(name=ing).all() :
             for p in i.recipes :
                 subset.add(p)
         result = result.intersection(subset)

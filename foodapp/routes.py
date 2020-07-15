@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, redirect, flash, request, jso
 from foodapp import app, bcrypt, db
 from foodapp.forms import RegistrationForm, LoginForm, AddRecipe
 from foodapp.models import User, Recipe, Ingredient
-from foodapp.utils import searching_by_dish_name, filter
+from foodapp.utils import searching_by_dish_name, filter, findRecipe
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -73,4 +73,14 @@ def search_by_dish():
 @app.route('/recipe', methods=['POST', 'GET'])
 def recipeFiltering() :
     recipes = Recipe.query.all()
-    return render_template('home.html', recipes=recipes)
+    return render_template('recipe.html', recipes=recipes)
+
+@app.route('/filter', methods=['POST', 'GET'])
+def filteredrecipe() :
+    ing_list = request.form['ing_list']
+    recipe_list = findRecipe(ing_list)
+    
+    ans = []
+    for rec in recipe_list :
+        ans.append( {'name' : rec.name, 'ingredients' : rec.ingredients, 'procedure' : rec.procedure} )
+    return jsonify({'result' : ans})

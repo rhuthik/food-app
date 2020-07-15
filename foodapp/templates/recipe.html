@@ -24,6 +24,20 @@
   
   <link rel="stylesheet" href="{{ url_for('static', filename='css/searchbox.css') }}">
   <script>
+    var ingredients_list = [];
+
+    function recipeFilter(){
+        req = $.ajax({
+            data : { 'ing_list' : ingredients_list },
+            type : 'POST',
+            url : '{{ url_for('filteredrecipe') }}'
+        });
+
+        req.done(function (data){
+            
+        });
+    }
+
     $(document).ready(function(){
         $('#searchbox_ing').keyup(function(){
           req = $.ajax({
@@ -35,8 +49,17 @@
           req.done(function (data){
             $('#cont_ing').html('');
             for (var i=0; i<data['result'].length; i++){
-              var btn = document.createElement("BUTTON");   
+              var btn = document.createElement("BUTTON");
               btn.innerHTML = data['result'][i];
+              btn.addEventListener('click', function() {
+                  if(!ingredients_list.includes(this.innerHTML)){
+                    ingredients_list.push(this.innerHTML);
+                    console.log(ingredients_list);
+
+                    recipeFilter();
+                  }
+              });
+
               document.getElementById('cont_ing').appendChild(btn);
             }
           });
