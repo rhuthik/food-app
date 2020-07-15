@@ -27,11 +27,22 @@
     var ingredients_list = [];
 
     function recipeFilter(){
+        $('#filterlist').html('');
+        for(var j=0; j<ingredients_list.length; j++){
+            $('#filterlist').append('<span class="card bg-primary"><div class="card-body text-center">' + ingredients_list[j] + ' <a name="' + ingredients_list[j] + '" onclick="removeIngredient(this)">X</a></div></span>');
+        }
+
         requ = $.post( "{{ url_for('filteredrecipe') }}", { 'info[]': ingredients_list } );
 
         requ.done(function (data){
             console.log(data);
         });
+    }
+
+    function removeIngredient(ele){
+      var ind = ingredients_list.indexOf(ele.name);
+      ingredients_list.splice(ind,1);
+      recipeFilter();
     }
     
 
@@ -56,7 +67,7 @@
 
                     $('#filterlist').html('');
                     for(var j=0; j<ingredients_list.length; j++){
-                      $('#filterlist').append('<span class="card bg-primary"><div class="card-body text-center"><p class="card-text">' + ingredients_list[j] + ' <a onclick="">X</a></p></div></span>');
+                      $('#filterlist').append('<span class="card bg-primary"><div class="card-body text-center">' + ingredients_list[j] + ' <a name="' + ingredients_list[j] + '" onclick="removeIngredient(this)">X</a></div></span>');
                     }
                     recipeFilter();
                   }
