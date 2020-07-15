@@ -20,7 +20,7 @@ def reg():
 @app.route("/home", methods=['GET', 'POST'])
 def home():
     recipes = Recipe.query.all()
-    return render_template('home.html', recipes=recipes);
+    return render_template('home.html', recipes=recipes)
 
 @app.route("/add", methods=['GET', 'POST'])
 def add():
@@ -68,4 +68,9 @@ def search_by_dish():
         ans = searching_by_dish_name(dish)
     else :
         ans = []
-    return jsonify({'dish' : ans}) 
+    return jsonify({'dish' : ans})
+
+@app.route('/recipe', methods=['POST', 'GET'])
+def recipeFiltering() :
+    recipes = Recipe.query.all()
+    return render_template('home.html', recipes=recipes)
