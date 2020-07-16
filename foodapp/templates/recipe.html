@@ -29,7 +29,7 @@
     function recipeFilter(){
         $('#filterlist').html('');
         for(var j=0; j<ingredients_list.length; j++){
-            $('#filterlist').append('<span class="card bg-primary"><div class="card-body text-center">' + ingredients_list[j] + ' <a name="' + ingredients_list[j] + '" onclick="removeIngredient(this)">X</a></div></span>');
+            $('#filterlist').append('<span class="badge-lg badge-pill badge-secondary">' + ingredients_list[j] + '   <button name="' + ingredients_list[j] + '" onclick="removeIngredient(this) " class="close pl-3"><span aria-hidden="true">&times;</span></button></span>');
         }
 
         requ = $.post( "{{ url_for('filteredrecipe') }}", { 'info[]': ingredients_list } );
@@ -93,7 +93,7 @@
     </div>
   </div>
 
-  <div id="filterlist" class="row">
+  <div id="filterlist" class="row pt-2">
 
   </div>
 
