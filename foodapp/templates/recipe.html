@@ -45,7 +45,14 @@
       ingredients_list.splice(ind,1);
       recipeFilter();
     }
-    
+
+    function deleteRecipe(ele, url_with_id){
+      requ = $.post( url_with_id );
+
+      requ.done(function (data){
+            ((ele.parentElement).parentElement).style.display = "none";
+      });
+    }
 
     $(document).ready(function(){
         $('#searchbox_ing').keyup(function(){

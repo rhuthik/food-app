@@ -48,7 +48,7 @@ def delete(id):
     db.session.delete(recipe)
     db.session.commit()
 
-    return redirect(url_for('home'))
+    return jsonify({ 'data' : 'none' })
 
 @app.route('/ingredientsearch', methods=['POST', 'GET'])
 def ingredientsearch() :

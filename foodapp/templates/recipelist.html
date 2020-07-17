@@ -19,7 +19,7 @@
       <li class="list-group-item">{{ recipe.procedure }}</li>
     </ul>
     <div class="card-body">
-      <a href="{{ url_for('delete', id=recipe.id) }}" class="card-link">Delete</a>
+      <a onclick="deleteRecipe(this, '{{ url_for('delete', id=recipe.id) }}')" class="card-link">Delete</a>
     </div>
   </div>
   <br>
