@@ -28,17 +28,27 @@ def add():
     theCheckList = []
     if request.method == 'POST':
         theCheckList = request.form.getlist('ingredient')
+        print(theCheckList)
     if form.validate_on_submit():
         recipe = Recipe(name=form.recipe_name.data, procedure=form.procedure.data)
         db.session.add(recipe)
         db.session.commit()
         
         for i in theCheckList:
-            ing = Ingredient.query.get(i)
-            recipe.ingredients.append(ing)
-            db.session.commit()
+            if Ingredient.query.filter_by(name=i).count() == 0 :
+                print("fdsaf")
+                new_ing = Ingredient(name=i)
+                db.session.add(new_ing)
+                db.session.commit()
+                recipe.ingredients.append(new_ing)
+                db.session.commit()
 
-        return redirect(url_for('home'))
+            else :
+                recipe.ingredients.append(Ingredient.query.filter_by(name=i).first())
+                db.session.commit()
+                
+
+        return redirect(url_for('add'))
 
     return render_template('add.html', form=form)
 

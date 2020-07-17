@@ -1,20 +1,98 @@
 {% extends "base.html" %}
 {% block TITLE %}
     <title>Add New</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/addstyle.css') }}">
+
+    <script>
+        ingredients_list = [];
+        function del(ele){
+            var ind = ingredients_list.indexOf(ele.name);
+            ingredients_list.splice(ind,1);
+
+            renderIngredientList();
+        }
+
+        function renderIngredientList(){
+            $('#filterlist').html('');
+            for(var j=0; j<ingredients_list.length; j++){
+                $('#filterlist').append('<li><input value="' + ingredients_list[j] + '" data-ingredient="' + ingredients_list[j] + '" name="ingredient" readonly>' + ' <button onclick="del(this)" class="btn">X</button></li>');
+            }
+        }
+
+        function addButton(){
+            new_ingredient = $('#searchbox_ing').val();
+
+            if(!ingredients_list.includes(new_ingredient)){
+                ingredients_list.push(new_ingredient);
+                console.log(ingredients_list);
+
+                renderIngredientList();
+            }
+        }
+
+        $(document).ready(function(){
+            $('#searchbox_ing').keyup(function(){
+              req = $.ajax({
+                data : { 'search' : $('#searchbox_ing').val() },
+                type : 'POST',
+                url : '{{ url_for('ingredientsearch') }}'
+              });
+                
+              req.done(function (data){
+                $('#cont_ing').html('');
+                for (var i=0; i<data['result'].length; i++){
+                    var btn = document.createElement("BUTTON");   
+                    btn.innerHTML = data['result'][i];
+                    btn.addEventListener("click", function() {
+                        if(!ingredients_list.includes(this.innerHTML)){
+                            ingredients_list.push(this.innerHTML);
+                            console.log(ingredients_list);
+
+                            renderIngredientList();
+                        }
+                    });
+                    document.getElementById('cont_ing').appendChild(btn);
+                }
+                if(data['result'].length != 0 || $('#searchbox_ing').val() == ''){
+                    document.getElementById("addBtn").style.display = "none";
+                }
+                else{
+                    document.getElementById("addBtn").style.display = "inline";
+                }
+              });
+            });    
+          });
+      </script>
+
 {% endblock %}
 
 {% block content %}
 
         <form method="POST">
+            
             <div class="form-group">
             {{ form.hidden_tag() }}
             <br><br>
-            Name of the Recipe : {{ form.recipe_name(class="form-control") }} <br><br>
-
-            Rice : <input type="checkbox" value="1" name="ingredient" > 
-            Wheat : <input type="checkbox" value="2" name="ingredient" > 
-            Chilly : <input type="checkbox" value="3" name="ingredient" > 
-            Turmeric : <input type="checkbox" value="4" name="ingredient" > <br><br>
+            Name of the Recipe : {{ form.recipe_name(class="form-control") }} 
+            <br><br>
+            <div id="myDIV">
+                Ingredients : <br>
+                <div class="dropdown">
+                    <div class="input-group mb-3">
+                        <input id="searchbox_ing" type="text" class="form-control" placeholder="Ingredient" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                          <button type="button" id="addBtn" class="btn btn-outline-secondary" onclick="addButton()">Add</button>
+                        </div>
+                      </div>
+                    <div class="dropdown-content" id="cont_ing">
+                        
+                    </div>
+                </div>
+            </div>
+            <br>
+            <ul id="filterlist">
+                
+            </ul>
 
             Procedure : {{ form.procedure(class="form-control") }} <br><br>
 
