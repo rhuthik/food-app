@@ -30,6 +30,7 @@ class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     procedure = db.Column(db.Text, nullable=False)
+    image_file = db.Column(db.String, nullable=False, default='Choor.jpg')
     ingredients = db.relationship('Ingredient', secondary=theTable, back_populates='recipes')
 
     def __repr__(self):
