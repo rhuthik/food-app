@@ -29,7 +29,7 @@
     function recipeFilter(){
         $('#filterlist').html('');
         for(var j=0; j<ingredients_list.length; j++){
-            $('#filterlist').append('<span class="badge-lg badge-pill badge-secondary">' + ingredients_list[j] + '   <button name="' + ingredients_list[j] + '" onclick="removeIngredient(this) " class="close pl-3"><span aria-hidden="true">&times;</span></button></span>');
+            $('#filterlist').append('<span class="badge-lg badge-pill badge-secondary">' + ingredients_list[j] + '   <button name="' + ingredients_list[j] + '" onclick="removeIngredient(this) " class="close ml-3 text-white"><span aria-hidden="true">&times;</span></button></span>');
         }
 
         requ = $.post( "{{ url_for('filteredrecipe') }}", { 'info[]': ingredients_list } );
