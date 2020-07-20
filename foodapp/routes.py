@@ -1,5 +1,6 @@
 import secrets
 import os
+from PIL import Image
 from flask import Flask, render_template, url_for, redirect, flash, request, jsonify
 from foodapp import app, bcrypt, db
 from foodapp.forms import RegistrationForm, LoginForm, AddRecipe
@@ -29,7 +30,11 @@ def save_picture(form_picture) :
     _, f_extension = os.path.splitext(form_picture.filename)
     picture_fn = ran_hex + f_extension
     picture_path = os.path.join(app.root_path, 'static/images/recipe_pics', picture_fn)
-    form_picture.save(picture_path)
+
+    output_size = (500,500)
+    i = Image.open(form_picture)
+    new_i = i.resize(output_size)
+    new_i.save(picture_path)
 
     return picture_fn
 
