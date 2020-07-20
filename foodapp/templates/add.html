@@ -2,7 +2,9 @@
 {% block TITLE %}
     <title>Add New</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/addstyle.css') }}">
-
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/a81368914c.js"></script>
     <script>
         ingredients_list = [];
         function del(ele){
@@ -15,7 +17,7 @@
         function renderIngredientList(){
             $('#filterlist').html('');
             for(var j=0; j<ingredients_list.length; j++){
-                $('#filterlist').append('<li><input value="' + ingredients_list[j] + '" data-ingredient="' + ingredients_list[j] + '" name="ingredient" readonly>' + ' <button onclick="del(this)" class="btn">X</button></li>');
+                $('#filterlist').append('<li><div class="input-group"><input class="form-control bg-light border-0" value="' + ingredients_list[j] + '" data-ingredient="' + ingredients_list[j] + '" name="ingredient" readonly>' + '<div class="input-group-append"> <button onclick="del(this)" class="btn btn-danger"><i class="fa fa-remove" aria-hidden="true"></i></button></div></div></li>');
             }
         }
 
@@ -90,9 +92,9 @@
                 </div>
             </div>
             <br>
-            <ul id="filterlist">
+            <ol id="filterlist">
                 
-            </ul>
+            </ol>
 
             Procedure : {{ form.procedure(class="form-control") }} <br><br>
 
