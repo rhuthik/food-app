@@ -71,12 +71,6 @@ class item{
         Append.classList.add('input-group-append');
         
 
-    	var edit = document.createElement('button');
-        edit.classList.add('edit');
-        edit.classList.add('btn-secondary');
-        edit.classList.add('btn');
-        edit.innerHTML = "<i class=\"fas fa-edit\"></i>";
-        edit.addEventListener('click', () => this.edit(input, name));
         
     	var remove = document.createElement('button');
         remove.classList.add('remove');
@@ -87,24 +81,11 @@ class item{
         
         prep1.appendChild(cb);
         prep2.appendChild(prep1);
-        Append.appendChild(edit);
         Append.appendChild(remove);
     	container.appendChild(itemBox);
         itemBox.appendChild(prep2);
         itemBox.appendChild(input);
         itemBox.appendChild(Append);
-    }
-
-    edit(input, name){
-        if(input.disabled == true){
-           input.disabled = !input.disabled;
-        }
-    	else{
-            input.disabled = !input.disabled;
-            let indexof = todos.indexOf(name);
-            todos[indexof] = input.value;
-            window.localStorage.setItem("todos", JSON.stringify(todos));
-        }
     }
 
     remove(itemBox, name){
