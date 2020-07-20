@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms.fields.html5 import EmailField
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
@@ -20,4 +21,5 @@ class LoginForm(FlaskForm):
 class AddRecipe(FlaskForm):
     recipe_name = StringField('Name of Recipe', validators=[DataRequired()])
     procedure = TextField('Procedure', widget=TextArea(), validators=[DataRequired()])
+    picture = FileField('Upload a picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Add')

@@ -5,17 +5,17 @@
   <title>Home</title>
   <script>
     $(document).ready(function(){
-      $('#searchbox1').keyup(function(){
+      $('#searchbox_rec').keyup(function(){
         req = $.ajax({
-          data : { dish : $('#searchbox1').val() },
+          data : { dish : $('#searchbox_rec').val() },
           type : 'POST', 
           url : '/dish' 
         }); 
 
         req.done(function (data){
-          $('#cont').html('');
+          $('#cont_rec').html('');
           for (var i=0; i<data['result'].length; i++){
-            $('#cont').append('<button>' + data['result'][i] + '</button>' );
+            $('#cont_rec').append('<button>' + data['result'][i] + '</button>' );
           }
         });
       });    
@@ -25,17 +25,19 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/searchbox.css') }}">
   <script>
     $(document).ready(function(){
-        $('#searchbox').keyup(function(){
+        $('#searchbox_ing').keyup(function(){
           req = $.ajax({
-            data : { 'search' : $('#searchbox').val() },
+            data : { 'search' : $('#searchbox_ing').val() },
             type : 'POST',
             url : '{{ url_for('ingredientsearch') }}'
           });
             
           req.done(function (data){
-            $('#cont').html('');
+            $('#cont_ing').html('');
             for (var i=0; i<data['result'].length; i++){
-              $('#cont').append('<button>' + data['result'][i] + '</button>' );
+              var btn = document.createElement("BUTTON");   
+              btn.innerHTML = data['result'][i];
+              document.getElementById('cont_ing').appendChild(btn);
             }
           });
         });    
@@ -48,8 +50,8 @@
   <br>
 
   <div class="dropdown">
-    <input class="dropbtn" id="searchbox" placeholder="Search">
-    <div class="dropdown-content" id="cont">
+    <input class="dropbtn" id="searchbox_ing" placeholder="Search">
+    <div class="dropdown-content" id="cont_ing">
         
     </div>
   </div>
@@ -58,7 +60,7 @@
   <div class="card-columns">
   {% for recipe in recipes %}
   <div class="card">
-    <img class="card-img-top" src="static/images/Choor.jpg" alt="Card image cap">
+    <img class="card-img-top" src="{{ url_for('static', filename='images/recipe_pics/' + recipe.image_file) }}" alt="Card image cap">
     <div class="card-body">
       <h4 class="card-title"><div class="p-3 mb-2 bg-secondary text-white">{{ recipe.name }}</div></h4>
       <p class="card-text">

@@ -41,11 +41,6 @@
     background-color:white;
   }
 
-  #filterlist {
-    margin: 5px;
-  }
-
-  #filterlist span {
-    margin: 5px;
-    color: white;
+  #addBtn {
+      display: none;
   }
