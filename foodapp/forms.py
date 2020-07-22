@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from foodapp.models import User
 from flask_wtf.file import FileField, FileAllowed
 from wtforms.fields.html5 import EmailField
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextField
@@ -13,12 +14,12 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign Up')
 
     def validate_username(self, username) :
-        User.query.filter_by(name=username.data).first()
+        user = User.query.filter_by(username=username.data).first()
         if user :
             raise ValidationError("The username has already taken please choose another one")
 
     def validate_email(self, email) :
-        User.query.filter_by(email=email.name).first()
+        user = User.query.filter_by(email=email.name).first()
         if user :
             raise ValidationError("The email has already taken please choose another one")
 

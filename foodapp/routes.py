@@ -2,11 +2,11 @@ import secrets
 import os
 from PIL import Image
 from flask import Flask, render_template, url_for, redirect, flash, request, jsonify
+from foodapp.models import User, Recipe, Ingredient
 from foodapp import app, bcrypt, db
 from foodapp.forms import RegistrationForm, LoginForm, AddRecipe
-from foodapp.models import User, Recipe, Ingredient
 from foodapp.utils import searching_by_dish_name, filter, findRecipe
-from flask_login import login_user
+from flask_login import login_user, logout_user
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -14,10 +14,11 @@ def reg():
     form = RegistrationForm()
     if form.validate_on_submit():
         hash_pwd = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hash_pwd)
-        db.session.add(user)
+        usr = User(username=form.username.data, email=form.email.data, password=hash_pwd)
+        db.session.add(usr)
         db.session.commit()
-        return redirect(url_for('home'))
+        flash('Your account has been created. Please login to continue', 'success')
+        return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
 @app.route("/login", methods=['POST', 'GET'])
@@ -27,10 +28,17 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data) :
             login_user(user, remember=form.remember.data)
+            flash('Login successful, Welcome ' + user.username +' !', 'success')
             return redirect(url_for('home'))
         else :
             flash('The email or password you have entered is incorrect. Please try again', 'danger')
     return render_template('login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    flash('Logout successful', 'info')
+    return redirect(url_for('login'))
 
 @app.route("/home", methods=['GET', 'POST'])
 def home():
