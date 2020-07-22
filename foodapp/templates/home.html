@@ -1,7 +1,7 @@
 {% extends "base.html" %}
   
   {% block TITLE %}
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script> -->
   <title>Home</title>
   <script>
     $(document).ready(function(){
@@ -59,30 +59,53 @@
   <br><br>
   <div class="card-columns">
   {% for recipe in recipes %}
-  <div class="card">
-    <img class="card-img-top" src="{{ url_for('static', filename='images/recipe_pics/' + recipe.image_file) }}" alt="Card image cap">
-    <div class="card-body">
-      <h4 class="card-title"><div class="p-3 mb-2 bg-secondary text-white">{{ recipe.name }}</div></h4>
-      <p class="card-text">
-      	<hr>
+  <div class="card bg-light">
+    <img class="card-img-top p-2" src="{{ url_for('static', filename='images/recipe_pics/' + recipe.image_file) }}" alt="Card image cap">
+    
+      <h4 class="card-title px-2"><div class="p-2 bg-white">{{ recipe.name }}</div></h4>
+      <div class="px-2 pb-3"><button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#exampleModal"><h5>View</h5></button></div>
+      <!-- <a href="{{ url_for('delete', id=recipe.id) }}" class="card-link">Delete</a> -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ recipe.name }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+           <div class="row">
+             <div class="col-4"> 
+      	    <img class="card-img-top px-5" src="{{ url_for('static', filename='images/recipe_pics/' + recipe.image_file) }}" alt="Card image cap">
+              </div>
+            <div class="col-8">
       		 <h5>
               Ingredients :
            </h5>
-           <p> 
+           <p> <ol>
               {% for ing in recipe.ingredients %}
-                  {{ ing.name }}, 
+               
+              <li>  {{ ing.name }}</li>
+              
               {% endfor %}
+              </ol>
           </p>
-      </p>
-    </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">{{ recipe.procedure }}</li>
-    </ul>
-    <div class="card-body">
-      <a href="{{ url_for('delete', id=recipe.id) }}" class="card-link">Delete</a>
+            </div>
+            </div>
+          <hr>
+      <ul class="list-group list-group-flush">
+        <li >{{ recipe.procedure }}</li>
+      </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <br>
+  
   {% endfor %}
   </div>
   {% endblock %}
