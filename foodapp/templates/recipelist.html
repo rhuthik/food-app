@@ -1,5 +1,5 @@
 {% for recipe in recipes %}
-<div class="card bg-light">
+<div class="card bg-light shadow">
   <img class="card-img-top p-2" src="{{ url_for('static', filename='images/recipe_pics/' + recipe.image_file) }}" alt="Card image cap">
   
     <h4 class="card-title px-2"><div class="p-2 bg-white">{{ recipe.name }}</div></h4>

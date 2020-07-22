@@ -129,3 +129,7 @@ def filteredrecipe() :
     ing_list = request.form.getlist('info[]')
     recipe_list = findRecipe(ing_list)
     return jsonify({'result' : render_template('recipelist.html', recipes=recipe_list)})
+
+@app.route('/account', methods=['POST', 'GET'])
+def account() :
+    return render_template('account.html')

@@ -1,9 +1,135 @@
 {% extends "base.html" %}
   
   {% block TITLE %}
-
+<title>my account:(User name)</title>
   {% endblock %}
 
   {% block content%}
-  
+  {% include "navbar.html" %}
+  <div class="container shadow mt-5 p-5">
+    <div class="text-center">
+      <img src="static/images/user default.png" class="rounded" alt="...">
+      <br>
+      <b>(User name)</b>
+      <br>
+      <button type="button" class="btn btn-primary">Follow</button>
+      <hr>
+      <h6><b>
+      <div class="row mx-5 p-3">
+        <div class="col">
+          Followers<br>
+          xx
+        </div>
+        <div class="col">
+          Following<br>
+          yy
+        </div>
+      </div>
+      </b></h6>
+      <hr>
+    </div>
+    <div class="row p-3">
+      <div class="col">
+        Email id:
+      </div>
+      <div class="col">
+        (Email id)
+      </div>
+    </div>
+    <div class="row p-3">
+      <div class="col">
+        Number of recipies uploaded:
+      </div>
+      <div class="col">
+        xxx
+      </div>
+    </div>
+    <div class="row p-3">
+      <div class="col">
+        Total number of likes recieved:
+      </div>
+      <div class="col">
+        xxx
+      </div>
+    </div>
+    <div class="accordion" id="accordionExample">
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h2 class="mb-0">
+            <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="flase" aria-controls="collapseOne">
+              My Recipes
+            </button>
+          </h2>
+        </div>
+    
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="card-body">
+            <ul class="list-group">
+              <li class="list-group-item">recipe 1</li>
+              <li class="list-group-item">recipe 2</li>
+              <li class="list-group-item">recipe 3</li>
+              <li class="list-group-item">recipe 4</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingTwo">
+          <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Liked Recipes
+            </button>
+          </h2>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+          <div class="card-body">
+            <ul class="list-group">
+              <li class="list-group-item">recipe 1</li>
+              <li class="list-group-item">recipe 2</li>
+              <li class="list-group-item">recipe 3</li>
+              <li class="list-group-item">recipe 4</li>
+            </ul>          
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingThree">
+          <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+             Saved Recipes
+            </button>
+          </h2>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+          <div class="card-body">
+            <ul class="list-group">
+              <li class="list-group-item">recipe 1</li>
+              <li class="list-group-item">recipe 2</li>
+              <li class="list-group-item">recipe 3</li>
+              <li class="list-group-item">recipe 4</li>
+            </ul>          
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingThree">
+          <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+             From Subscribed Users
+            </button>
+          </h2>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+          <div class="card-body">
+            <ul class="list-group">
+              <li class="list-group-item">recipe 1</li>
+              <li class="list-group-item">recipe 2</li>
+              <li class="list-group-item">recipe 3</li>
+              <li class="list-group-item">recipe 4</li>
+            </ul>          
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   {% endblock %}
