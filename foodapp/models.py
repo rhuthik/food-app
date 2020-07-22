@@ -26,8 +26,9 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     isEmailVerified = db.Column(db.Boolean, nullable=True , default=False)
-    propic = db.Column(db.String(20), default='def.jpg', nullable=False)
+    propic = db.Column(db.String(20), default='default.jpg', nullable=False)
     password = db.Column(db.String(60), nullable=False)
+    recipes_authored = db.relationship('Recipe', backref='author', lazy=True)
     recipes_liked = db.relationship('Recipe', secondary=likeTable, back_populates='users_liked')
     recipes_disliked = db.relationship('Recipe', secondary=likeTable, back_populates='users_liked')
 
@@ -50,6 +51,7 @@ class Recipe(db.Model):
     procedure = db.Column(db.Text, nullable=False)
     image_file = db.Column(db.String, nullable=False, default='default.png')
     ingredients = db.relationship('Ingredient', secondary=theTable, back_populates='recipes')
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     users_liked = db.relationship('User', secondary=likeTable, back_populates='recipes_liked')
     users_disliked = db.relationship('User', secondary=dislikeTable, back_populates='recipes_disliked')
 

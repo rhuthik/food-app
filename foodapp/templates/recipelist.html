@@ -34,11 +34,12 @@
           </div>
           </div>
         <hr>
-    <ul class="list-group list-group-flush">
-      <li >{{ recipe.procedure }}</li>
-    </ul>
+        <ul class="list-group list-group-flush">
+          <li >{{ recipe.procedure }}</li>
+        </ul>
         </div>
         <div class="modal-footer">
+          <h6>Added by : {{ recipe.author.username }}</h6>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
