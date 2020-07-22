@@ -14,15 +14,6 @@
         <form method="POST">
             {{ form.hidden_tag() }}
             <div class="form-group">
-              <label for="exampleInputUsername1">Username</label>
-              {{ form.username(placeholder="Username", class="form-control border-top-0 border-left-0 border-right-0", id="exampleInputUsername1") }}
-              {% if form.username.errors %}
-                {% for error in form.username.errors %}
-                  <small id="emailHelp" class="form-text text-danger">{{ error }}</small>
-                {% endfor %}
-              {% endif %}
-            </div>
-            <div class="form-group">
               <label for="exampleInputEmail1">Email address</label>
               {{ form.email(placeholder="Email", class="form-control border-top-0 border-left-0 border-right-0", id="exampleInputEmail1") }}
               {% if form.email.errors %}
@@ -40,16 +31,20 @@
                 {% endfor %}
               {% endif %}
             </div>
-            <div class="form-group">
-              <label for="exampleInputConfirmPassword1">Confirm password</label>
-              {{ form.confirm_password(placeholder="confirm password", class="form-control border-top-0 border-left-0 border-right-0", id="exampleInputPassword1") }}
-              {% if form.confirm_password.errors %}
-                {% for error in form.confirm_password.errors %}
-                  <small id="emailHelp" class="form-text text-danger">{{ error }}</small>
-                {% endfor %}
-              {% endif %}
+            <div class="form-group form-check">
+                {{ form.remember(class="form-check-input", id="exampleCheck1") }}
+                <label class="form-check-label" for="exampleCheck1">Remember me</label>
             </div>
             {{ form.submit(class="btn btn-primary") }}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{category}} mt-2">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
           </form>
           </div>
           </div>

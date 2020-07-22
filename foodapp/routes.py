@@ -6,6 +6,7 @@ from foodapp import app, bcrypt, db
 from foodapp.forms import RegistrationForm, LoginForm, AddRecipe
 from foodapp.models import User, Recipe, Ingredient
 from foodapp.utils import searching_by_dish_name, filter, findRecipe
+from flask_login import login_user
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -16,9 +17,20 @@ def reg():
         user = User(username=form.username.data, email=form.email.data, password=hash_pwd)
         db.session.add(user)
         db.session.commit()
-        flash('Account created successfully', 'success')
         return redirect(url_for('home'))
     return render_template('register.html', form=form)
+
+@app.route("/login", methods=['POST', 'GET'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data) :
+            login_user(user, remember=form.remember.data)
+            return redirect(url_for('home'))
+        else :
+            flash('The email or password you have entered is incorrect. Please try again', 'danger')
+    return render_template('login.html', form=form)
 
 @app.route("/home", methods=['GET', 'POST'])
 def home():
