@@ -17,6 +17,11 @@ dislikeTable = db.Table('dislike',
     db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id'))
 )
 
+favoritesTable = db.Table('favorites',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id'))
+)
+
 @login_manager.user_loader
 def load_user(user_id) :
     return User.query.get(int(user_id))
@@ -29,8 +34,9 @@ class User(db.Model, UserMixin):
     propic = db.Column(db.String(20), default='default.jpg', nullable=False)
     password = db.Column(db.String(60), nullable=False)
     recipes_authored = db.relationship('Recipe', backref='author', lazy=True)
+    favorite_recipes = db.relationship('Recipe', secondary=favoritesTable, back_populates='users_favorite')
     recipes_liked = db.relationship('Recipe', secondary=likeTable, back_populates='users_liked')
-    recipes_disliked = db.relationship('Recipe', secondary=likeTable, back_populates='users_liked')
+    recipes_disliked = db.relationship('Recipe', secondary=dislikeTable, back_populates='users_disliked')
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.propic}')"
@@ -52,6 +58,7 @@ class Recipe(db.Model):
     image_file = db.Column(db.String, nullable=False, default='default.png')
     ingredients = db.relationship('Ingredient', secondary=theTable, back_populates='recipes')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    users_favorite = db.relationship('User', secondary=favoritesTable, back_populates='favorite_recipes')
     users_liked = db.relationship('User', secondary=likeTable, back_populates='recipes_liked')
     users_disliked = db.relationship('User', secondary=dislikeTable, back_populates='recipes_disliked')
 

@@ -148,4 +148,64 @@ def recipeFiltering() :
 def filteredrecipe() :
     ing_list = request.form.getlist('info[]')
     recipe_list = findRecipe(ing_list)
-    return jsonify({'result' : render_template('recipelist.html', recipes=recipe_list)})
+    passing_recipe_list = []
+    for recipe in recipe_list :
+        sub_rec = {}
+        sub_rec['recipe'] = recipe
+        if recipe in User.query.get(current_user.get_id()).recipes_liked :
+            sub_rec['liked'] = True
+        else :
+            sub_rec['liked'] = False
+        if recipe in User.query.get(current_user.get_id()).recipes_disliked :
+            sub_rec['disliked'] = True
+        else :
+            sub_rec['disliked'] = False
+        sub_rec['likes'] = len(recipe.users_liked)
+        sub_rec['dislikes'] = len(recipe.users_disliked)
+        print(sub_rec['recipe'].name + ": " + str(sub_rec['disliked']))
+        passing_recipe_list.append(sub_rec)
+        
+
+    return jsonify({'result' : render_template('recipelist.html', recipes=passing_recipe_list)})
+
+@app.route('/like', methods=['POST', 'GET'])
+def like() :
+    id = request.form['id'] 
+    id = int(id)
+    rec = Recipe.query.get(id)
+    turnOtherOff = False
+
+    if User.query.get(current_user.get_id()) in rec.users_liked :
+        rec.users_liked.remove(User.query.get(current_user.get_id()))
+        db.session.commit()
+    elif User.query.get(current_user.get_id()) in rec.users_disliked :
+        rec.users_disliked.remove(User.query.get(current_user.get_id()))
+        rec.users_liked.append(User.query.get(current_user.get_id()))
+        db.session.commit()
+        turnOtherOff = True
+    else :
+        rec.users_liked.append(User.query.get(current_user.get_id()))
+        db.session.commit()
+
+    return jsonify({ 'like' : len(rec.users_liked), 'dislike' : len(rec.users_disliked), 'turnotheroff' : turnOtherOff })
+
+@app.route('/dislike', methods=['POST', 'GET'])
+def dislike() :
+    id = request.form['id']
+    id = int(id)
+    rec = Recipe.query.get(id)
+    turnOtherOff = False
+
+    if User.query.get(current_user.get_id()) in rec.users_disliked :
+        rec.users_disliked.remove(User.query.get(current_user.get_id()))
+        db.session.commit()
+    elif User.query.get(current_user.get_id()) in rec.users_liked :
+        rec.users_liked.remove(User.query.get(current_user.get_id()))
+        rec.users_disliked.append(User.query.get(current_user.get_id()))
+        db.session.commit()
+        turnOtherOff = True
+    else :
+        rec.users_disliked.append(User.query.get(current_user.get_id()))
+        db.session.commit()
+
+    return jsonify({ 'like' : len(rec.users_liked), 'dislike' : len(rec.users_disliked), 'turnotheroff' : turnOtherOff })
