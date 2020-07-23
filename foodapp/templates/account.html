@@ -12,7 +12,6 @@
       <br>
       <b>(User name)</b>
       <br>
-      <button type="button" class="btn btn-primary">Follow</button>
       <hr>
       <h6><b>
       <div class="row mx-5 p-3">
@@ -65,10 +64,9 @@
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
           <div class="card-body">
             <ul class="list-group">
-              <li class="list-group-item">recipe 1</li>
-              <li class="list-group-item">recipe 2</li>
-              <li class="list-group-item">recipe 3</li>
-              <li class="list-group-item">recipe 4</li>
+              {% for recipe in my_recipes %}
+                <li class="list-group-item">{{ recipe.name }}</li>
+              {% endfor %}
             </ul>
           </div>
         </div>
@@ -84,10 +82,9 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
           <div class="card-body">
             <ul class="list-group">
-              <li class="list-group-item">recipe 1</li>
-              <li class="list-group-item">recipe 2</li>
-              <li class="list-group-item">recipe 3</li>
-              <li class="list-group-item">recipe 4</li>
+              {% for recipe in liked_recipes %}
+                <li class="list-group-item">{{ recipe.name }}</li>
+              {% endfor %}
             </ul>          
           </div>
         </div>

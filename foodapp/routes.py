@@ -34,7 +34,6 @@ def login():
             user = User.query.filter_by(email=form.email.data).first()
             if user and bcrypt.check_password_hash(user.password, form.password.data) :
                 login_user(user, remember=form.remember.data)
-                flash('Login successful, Welcome ' + user.username +' !', 'success')
                 return redirect(url_for('home'))
             else :
                 flash('The email or password you have entered is incorrect. Please try again', 'danger')
@@ -50,10 +49,9 @@ def logout():
 def home():
     if current_user.is_authenticated :
         recipes = Recipe.query.all()
-        flash('Login successful, Welcome ' + User.query.get(current_user.get_id()).username +' !', 'success')
+        flash('Welcome ' + User.query.get(current_user.get_id()).username +' !', 'success')
         return render_template('home.html', recipes=recipes)
     else :
-        flash('Please login', 'info')
         return redirect(url_for('login'))
 
 def save_picture(form_picture) :
@@ -101,7 +99,6 @@ def add():
                     
 
             return redirect(url_for('add'))
-        flash('Please login', 'info')
         return render_template('add.html', form=form)
     else :
         return redirect(url_for('login'))
@@ -213,4 +210,4 @@ def dislike() :
 
 @app.route('/account', methods=['POST', 'GET'])
 def account() :
-    return render_template('account.html')
+    return render_template('account.html', my_recipe=User.query.get(current_user.get_id()).recipes_authored, liked_recipes=User.query.get(current_user.get_id()).recipes_liked)
