@@ -1,9 +1,13 @@
-from foodapp import db
-from foodapp.models import Recipe, Ingredient
+from foodapp import db, bcrypt
+from foodapp.models import User, Recipe, Ingredient
 import json
 
 db.drop_all()
 db.create_all()
+
+user = User(username="admin", email="admin@foodapp.com", password=bcrypt.generate_password_hash('admin123'))
+db.session.add(user)
+db.session.commit()
 
 with open('seed-resource/train.json') as json_file:
     data = json.loads(json_file.read())

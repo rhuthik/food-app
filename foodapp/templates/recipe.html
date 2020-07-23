@@ -26,6 +26,58 @@
   <script>
     var ingredients_list = [];
 
+    function likeRecipe(ele){
+      req = $.ajax({
+            data : { 'id' :  ele.name },
+            type : 'POST',
+            url : '{{ url_for('like') }}'
+          });
+            
+          req.done(function (data){
+            if (ele.style.backgroundColor != 'white'){
+              ele.style.backgroundColor = 'white';
+              ele.innerHTML = 'Like ' + data['like'];
+            }
+            else{
+              ele.style.backgroundColor = '#0099cc';
+              ele.innerHTML = 'Like ' + data['like'];
+            }
+
+            if (data['turnotheroff']){
+              document.getElementById('dislikeBut'+ele.name).style.backgroundColor = 'white';
+              document.getElementById('dislikeBut'+ele.name).innerHTML = 'Dislike '+data['dislike'];
+            }
+          });
+    }
+
+    function dislikeRecipe(ele){
+      req = $.ajax({
+            data : { 'id' :  ele.name },
+            type : 'POST',
+            url : '{{ url_for('dislike') }}'
+          });
+            
+          req.done(function (data){
+            if (ele.style.backgroundColor != 'white'){
+              ele.style.backgroundColor = 'white';
+              ele.innerHTML = 'Dislike ' + data['dislike'];
+            }
+            else{
+              ele.style.backgroundColor = 'red';
+              ele.innerHTML = 'Dislike ' + data['dislike'];
+            }
+
+            if (data['turnotheroff']){
+              document.getElementById('likeBut'+ele.name).style.backgroundColor = 'white';
+              document.getElementById('likeBut'+ele.name).innerHTML = 'Like '+data['like'];
+            }
+          });
+    }
+
+    function addToFavorites(ele){
+
+    }
+
     function recipeFilter(){
         $('#filterlist').html('');
         for(var j=0; j<ingredients_list.length; j++){
