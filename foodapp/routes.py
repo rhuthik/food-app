@@ -3,10 +3,11 @@ import os
 from PIL import Image
 from flask import Flask, render_template, url_for, redirect, flash, request, jsonify
 from foodapp.models import User, Recipe, Ingredient
-from foodapp import app, bcrypt, db
+from foodapp import app, bcrypt, db, mail
 from foodapp.forms import RegistrationForm, LoginForm, AddRecipe
 from foodapp.utils import searching_by_dish_name, filter, findRecipe
 from flask_login import login_user, logout_user, current_user
+from flask_mail import Message
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -48,9 +49,12 @@ def logout():
 @app.route("/home", methods=['GET', 'POST'])
 def home():
     if current_user.is_authenticated :
-        recipes = Recipe.query.all()
-        flash('Welcome ' + User.query.get(current_user.get_id()).username +' !', 'success')
-        return render_template('home.html', recipes=recipes)
+        if User.query.get(current_user.get_id()).isEmailVerified == True :
+            recipes = Recipe.query.all()
+            flash('Welcome ' + User.query.get(current_user.get_id()).username +' !', 'success')
+            return render_template('home.html')
+        else :
+            return redirect(url_for('emailverify'))
     else :
         return redirect(url_for('login'))
 
@@ -70,36 +74,39 @@ def save_picture(form_picture) :
 @app.route("/add", methods=['GET', 'POST'])
 def add():
     if current_user.is_authenticated :
-        form = AddRecipe()
-        theCheckList = []
-        if request.method == 'POST':
-            theCheckList = request.form.getlist('ingredient')
-            print(theCheckList)
-        if form.validate_on_submit():
-            recipe = Recipe(name=form.recipe_name.data, procedure=form.procedure.data)
-            if form.picture.data :
-                picture_file = save_picture(form.picture.data)
-                recipe.image_file = picture_file
-            db.session.add(recipe)
-            db.session.commit()
-            recipe.author = User.query.get(current_user.get_id())
-            
-            for i in theCheckList:
-                if Ingredient.query.filter_by(name=i).count() == 0 :
-                    print("fdsaf")
-                    new_ing = Ingredient(name=i)
-                    db.session.add(new_ing)
-                    db.session.commit()
-                    recipe.ingredients.append(new_ing)
-                    db.session.commit()
+        if User.query.get(current_user.get_id()).isEmailVerified == True :
+            form = AddRecipe()
+            theCheckList = []
+            if request.method == 'POST':
+                theCheckList = request.form.getlist('ingredient')
+                print(theCheckList)
+            if form.validate_on_submit():
+                recipe = Recipe(name=form.recipe_name.data, procedure=form.procedure.data)
+                if form.picture.data :
+                    picture_file = save_picture(form.picture.data)
+                    recipe.image_file = picture_file
+                db.session.add(recipe)
+                db.session.commit()
+                recipe.author = User.query.get(current_user.get_id())
+                
+                for i in theCheckList:
+                    if Ingredient.query.filter_by(name=i).count() == 0 :
+                        print("fdsaf")
+                        new_ing = Ingredient(name=i)
+                        db.session.add(new_ing)
+                        db.session.commit()
+                        recipe.ingredients.append(new_ing)
+                        db.session.commit()
 
-                else :
-                    recipe.ingredients.append(Ingredient.query.filter_by(name=i).first())
-                    db.session.commit()
-                    
+                    else :
+                        recipe.ingredients.append(Ingredient.query.filter_by(name=i).first())
+                        db.session.commit()
+                        
 
-            return redirect(url_for('add'))
-        return render_template('add.html', form=form)
+                return redirect(url_for('add'))
+            return render_template('add.html', form=form)
+        else :
+            return redirect(url_for('emailverify'))
     else :
         return redirect(url_for('login'))
 
@@ -107,9 +114,12 @@ def add():
 def delete(id):
     recipe = Recipe.query.get(id)
     if recipe.author == User.query.get(current_user.get_id()) :
-        db.session.delete(recipe)
-        db.session.commit()
-        return jsonify({ 'data' : 'none' })
+        if User.query.get(current_user.get_id()).isEmailVerified == True :
+            db.session.delete(recipe)
+            db.session.commit()
+            return jsonify({ 'data' : 'none' })
+        else :
+            return redirect(url_for('emailverify'))
     else :
         return "Unauthorized"
 
@@ -136,8 +146,11 @@ def search_by_dish():
 @app.route('/recipe', methods=['POST', 'GET'])
 def recipeFiltering() :
     if current_user.is_authenticated :
-        recipes = Recipe.query.all()
-        return render_template('recipe.html')
+        if User.query.get(current_user.get_id()).isEmailVerified == True :
+            recipes = Recipe.query.all()
+            return render_template('recipe.html')
+        else :
+            return redirect(url_for('emailverify'))
     else :
         return redirect(url_for('login'))
 
@@ -168,46 +181,89 @@ def filteredrecipe() :
 
 @app.route('/like', methods=['POST', 'GET'])
 def like() :
-    id = request.form['id'] 
-    id = int(id)
-    rec = Recipe.query.get(id)
-    turnOtherOff = False
+    if current_user.is_authenticated :
+        if User.query.get(current_user.get_id()).isEmailVerified == True :
+            id = request.form['id'] 
+            id = int(id)
+            rec = Recipe.query.get(id)
+            turnOtherOff = False
 
-    if User.query.get(current_user.get_id()) in rec.users_liked :
-        rec.users_liked.remove(User.query.get(current_user.get_id()))
-        db.session.commit()
-    elif User.query.get(current_user.get_id()) in rec.users_disliked :
-        rec.users_disliked.remove(User.query.get(current_user.get_id()))
-        rec.users_liked.append(User.query.get(current_user.get_id()))
-        db.session.commit()
-        turnOtherOff = True
+            if User.query.get(current_user.get_id()) in rec.users_liked :
+                rec.users_liked.remove(User.query.get(current_user.get_id()))
+                db.session.commit()
+            elif User.query.get(current_user.get_id()) in rec.users_disliked :
+                rec.users_disliked.remove(User.query.get(current_user.get_id()))
+                rec.users_liked.append(User.query.get(current_user.get_id()))
+                db.session.commit()
+                turnOtherOff = True
+            else :
+                rec.users_liked.append(User.query.get(current_user.get_id()))
+                db.session.commit()
+
+            return jsonify({ 'like' : len(rec.users_liked), 'dislike' : len(rec.users_disliked), 'turnotheroff' : turnOtherOff })
+        else :
+            return redirect(url_for('emailverify'))
     else :
-        rec.users_liked.append(User.query.get(current_user.get_id()))
-        db.session.commit()
-
-    return jsonify({ 'like' : len(rec.users_liked), 'dislike' : len(rec.users_disliked), 'turnotheroff' : turnOtherOff })
+        return redirect(url_for('login'))
 
 @app.route('/dislike', methods=['POST', 'GET'])
 def dislike() :
-    id = request.form['id']
-    id = int(id)
-    rec = Recipe.query.get(id)
-    turnOtherOff = False
+    if current_user.is_authenticated :
+        if User.query.get(current_user.get_id()).isEmailVerified == True :
+            id = request.form['id']
+            id = int(id)
+            rec = Recipe.query.get(id)
+            turnOtherOff = False
 
-    if User.query.get(current_user.get_id()) in rec.users_disliked :
-        rec.users_disliked.remove(User.query.get(current_user.get_id()))
-        db.session.commit()
-    elif User.query.get(current_user.get_id()) in rec.users_liked :
-        rec.users_liked.remove(User.query.get(current_user.get_id()))
-        rec.users_disliked.append(User.query.get(current_user.get_id()))
-        db.session.commit()
-        turnOtherOff = True
+            if User.query.get(current_user.get_id()) in rec.users_disliked :
+                rec.users_disliked.remove(User.query.get(current_user.get_id()))
+                db.session.commit()
+            elif User.query.get(current_user.get_id()) in rec.users_liked :
+                rec.users_liked.remove(User.query.get(current_user.get_id()))
+                rec.users_disliked.append(User.query.get(current_user.get_id()))
+                db.session.commit()
+                turnOtherOff = True
+            else :
+                rec.users_disliked.append(User.query.get(current_user.get_id()))
+                db.session.commit()
+
+            return jsonify({ 'like' : len(rec.users_liked), 'dislike' : len(rec.users_disliked), 'turnotheroff' : turnOtherOff })
+        else :
+            return redirect(url_for('emailverify'))
     else :
-        rec.users_disliked.append(User.query.get(current_user.get_id()))
-        db.session.commit()
-
-    return jsonify({ 'like' : len(rec.users_liked), 'dislike' : len(rec.users_disliked), 'turnotheroff' : turnOtherOff })
+        return redirect(url_for('login'))
 
 @app.route('/account', methods=['POST', 'GET'])
 def account() :
-    return render_template('account.html', my_recipe=User.query.get(current_user.get_id()).recipes_authored, liked_recipes=User.query.get(current_user.get_id()).recipes_liked)
+    if current_user.is_authenticated :
+        if User.query.get(current_user.get_id()).isEmailVerified == True :
+            return render_template('account.html', my_recipe=User.query.get(current_user.get_id()).recipes_authored, liked_recipes=User.query.get(current_user.get_id()).recipes_liked)
+        else :
+            return redirect(url_for('emailverify'))
+    else :
+        return redirect(url_for('login'))
+
+def send_email(user) :
+    token = user.get_token()
+    msg = Message('Email Verification Request', sender='foodappverify@gmail.com', recipients=[user.email])
+    msg.body = f"""Hi {user.username}, To verify your email address go to the following link  
+{url_for('verifyEmail', token=token, _external=True)}
+"""
+    mail.send(msg)
+
+@app.route('/emailverify', methods=['POST', 'GET'])
+def emailverify():
+    user = User.query.get(current_user.get_id())
+    send_email(user)
+
+    return render_template('emailverify.html')
+
+@app.route('/verify/<token>', methods=['POST', 'GET'])
+def verifyEmail(token) :
+    user = User.verify_token(token)
+    if user is None :
+        return "Invalid token or token has expired"
+    User.query.get(current_user.get_id()).isEmailVerified = True
+    db.session.commit()
+    flash('Email has verified', 'success')
+    return redirect(url_for('home'))
