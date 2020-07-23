@@ -1,48 +1,9 @@
 {% extends "base.html" %}
   
   {% block TITLE %}
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script> -->
   <title>Home</title>
-  <script>
-    $(document).ready(function(){
-      $('#searchbox_rec').keyup(function(){
-        req = $.ajax({
-          data : { dish : $('#searchbox_rec').val() },
-          type : 'POST', 
-          url : '/dish' 
-        }); 
-
-        req.done(function (data){
-          $('#cont_rec').html('');
-          for (var i=0; i<data['result'].length; i++){
-            $('#cont_rec').append('<button>' + data['result'][i] + '</button>' );
-          }
-        });
-      });    
-    });
-  </script>
   
   <link rel="stylesheet" href="{{ url_for('static', filename='css/searchbox.css') }}">
-  <script>
-    $(document).ready(function(){
-        $('#searchbox_ing').keyup(function(){
-          req = $.ajax({
-            data : { 'search' : $('#searchbox_ing').val() },
-            type : 'POST',
-            url : '{{ url_for('ingredientsearch') }}'
-          });
-            
-          req.done(function (data){
-            $('#cont_ing').html('');
-            for (var i=0; i<data['result'].length; i++){
-              var btn = document.createElement("BUTTON");   
-              btn.innerHTML = data['result'][i];
-              document.getElementById('cont_ing').appendChild(btn);
-            }
-          });
-        });    
-      });
-  </script>
 
   {% endblock %}
 
@@ -57,56 +18,12 @@
     </div>
   </div>
 
-  <br><br>
-  <div class="card-columns">
-  {% for recipe in recipes %}
-  <div class="card bg-light shadow">
-    <img class="card-img-top p-2" src="{{ url_for('static', filename='images/recipe_pics/' + recipe.image_file) }}" alt="Card image cap">
-    
-      <h4 class="card-title px-2"><div class="p-2 bg-white">{{ recipe.name }}</div></h4>
-      <div class="px-2 pb-3"><button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#exampleModal"><h5>View</h5></button></div>
-      <!-- <a href="{{ url_for('delete', id=recipe.id) }}" class="card-link">Delete</a> -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{{ recipe.name }}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-           <div class="row">
-             <div class="col-4"> 
-      	    <img class="card-img-top" src="{{ url_for('static', filename='images/recipe_pics/' + recipe.image_file) }}" alt="Card image cap">
-              </div>
-            <div class="col-8">
-      		 <h5>
-              Ingredients :
-           </h5>
-           <p> <ol>
-              {% for ing in recipe.ingredients %}
-               
-              <li>  {{ ing.name }}</li>
-              
-              {% endfor %}
-              </ol>
-          </p>
-            </div>
-            </div>
-          <hr>
-      <ul class="list-group list-group-flush">
-        <li >{{ recipe.procedure }}</li>
-      </ul>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div id="filterlist" class="row pt-2">
+
   </div>
+
+  <br><br>
+  <div id="recipe_list" class="card-columns">
   
-  {% endfor %}
   </div>
   {% endblock %}

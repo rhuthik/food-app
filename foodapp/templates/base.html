@@ -1,25 +1,167 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script>
-    {% block TITLE %}
-    {% endblock %}
-  </head>
 
-  <body>
-    <div class="container my-5 ">
-      <div class="row">
-        <div class="col-sm">
-            {% block content %}
-            {% endblock %}
-          </div>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script>
+    var ingredients_list = [];
+
+    function likeRecipe(ele) {
+      req = $.ajax({
+        data: { 'id': ele.name },
+        type: 'POST',
+        url: '{{ url_for('like') }}'
+      });
+
+      req.done(function (data) {
+        if (ele.style.backgroundColor != 'white') {
+          ele.style.backgroundColor = 'white';
+          ele.innerHTML = 'Like ' + data['like'];
+        }
+        else {
+          ele.style.backgroundColor = '#0099cc';
+          ele.innerHTML = 'Like ' + data['like'];
+        }
+
+        if (data['turnotheroff']) {
+          document.getElementById('dislikeBut' + ele.name).style.backgroundColor = 'white';
+          document.getElementById('dislikeBut' + ele.name).innerHTML = 'Dislike ' + data['dislike'];
+        }
+      });
+    }
+
+    function dislikeRecipe(ele) {
+      req = $.ajax({
+        data: { 'id': ele.name },
+        type: 'POST',
+        url: '{{ url_for('dislike') }}'
+      });
+
+      req.done(function (data) {
+        if (ele.style.backgroundColor != 'white') {
+          ele.style.backgroundColor = 'white';
+          ele.innerHTML = 'Dislike ' + data['dislike'];
+        }
+        else {
+          ele.style.backgroundColor = 'red';
+          ele.innerHTML = 'Dislike ' + data['dislike'];
+        }
+
+        if (data['turnotheroff']) {
+          document.getElementById('likeBut' + ele.name).style.backgroundColor = 'white';
+          document.getElementById('likeBut' + ele.name).innerHTML = 'Like ' + data['like'];
+        }
+      });
+    }
+
+    function addToFavorites(ele) {
+
+    }
+
+    function recipeFilter() {
+      $('#filterlist').html('');
+      for (var j = 0; j < ingredients_list.length; j++) {
+        $('#filterlist').append('<span class="badge-lg badge-pill badge-secondary">' + ingredients_list[j] + '   <button name="' + ingredients_list[j] + '" onclick="removeIngredient(this) " class="close ml-3 text-white"><span aria-hidden="true">&times;</span></button></span>');
+      }
+
+      requ = $.post("{{ url_for('filteredrecipe') }}", { 'info[]': ingredients_list });
+
+      requ.done(function (data) {
+        console.log(data.result);
+        $('#recipe_list').html(data.result);
+      });
+    }
+
+    function removeIngredient(ele) {
+      var ind = ingredients_list.indexOf(ele.name);
+      ingredients_list.splice(ind, 1);
+      recipeFilter();
+    }
+
+    function deleteRecipe(ele, url_with_id) {
+      requ = $.post(url_with_id);
+
+      requ.done(function (data) {
+        ((ele.parentElement).parentElement).style.display = "none";
+      });
+    }
+
+    $(document).ready(function () {
+      $('#searchbox_rec').keyup(function () {
+        req = $.ajax({
+          data: { dish: $('#searchbox_rec').val() },
+          type: 'POST',
+          url: 'search_by_dish'
+        });
+
+        req.done(function (data) {
+          $('#cont_rec').html('');
+          for (var i = 0; i < data['result'].length; i++) {
+            $('#cont_rec').append('<button>' + data['result'][i] + '</button>');
+          }
+        });
+      });
+
+      $('#searchbox_ing').keyup(function () {
+        req = $.ajax({
+          data: { 'search': $('#searchbox_ing').val() },
+          type: 'POST',
+          url: '{{ url_for('ingredientsearch') }}'
+      });
+
+        req.done(function (data) {
+          $('#cont_ing').html('');
+          for (var i = 0; i < data['result'].length; i++) {
+            var btn = document.createElement("BUTTON");
+            btn.innerHTML = data['result'][i];
+
+            btn.addEventListener('click', function () {
+              if (!ingredients_list.includes(this.innerHTML)) {
+                ingredients_list.push(this.innerHTML);
+                console.log(ingredients_list);
+
+                $('#filterlist').html('');
+                for (var j = 0; j < ingredients_list.length; j++) {
+                  $('#filterlist').append('<span class="card bg-primary"><div class="card-body text-center">' + ingredients_list[j] + ' <a name="' + ingredients_list[j] + '" onclick="removeIngredient(this)">X</a></div></span>');
+                }
+                recipeFilter();
+              }
+            });
+
+            document.getElementById('cont_ing').appendChild(btn);
+          }
+        });
+      });
+    });
+  </script>
+
+  {% block TITLE %}
+  {% endblock %}
+</head>
+
+<body>
+  <div class="container my-5 ">
+    <div class="row">
+      <div class="col-sm">
+        {% block content %}
+        {% endblock %}
       </div>
     </div>
-    
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
-  </body>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+    crossorigin="anonymous"></script>
+</body>
+
 </html>
