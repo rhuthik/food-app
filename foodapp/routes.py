@@ -253,10 +253,13 @@ def send_email(user) :
 
 @app.route('/emailverify', methods=['POST', 'GET'])
 def emailverify():
-    user = User.query.get(current_user.get_id())
-    send_email(user)
+    if User.query.get(current_user.get_id()).isEmailVerified :
+        return redirect(url_for('home'))
+    else :
+        user = User.query.get(current_user.get_id())
+        send_email(user)
 
-    return render_template('emailverify.html')
+        return render_template('emailverify.html')
 
 @app.route('/verify/<token>', methods=['POST', 'GET'])
 def verifyEmail(token) :
