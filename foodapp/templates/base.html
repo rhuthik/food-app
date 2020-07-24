@@ -11,6 +11,18 @@
   <script>
     var ingredients_list = [];
 
+    function followUser(username){
+      req = $.ajax({
+        data: { 'username': username },
+        type: 'POST',
+        url: '{{ url_for('followUser') }}'
+      });
+
+      req.done(function (data){
+        document.getElementById('user' + username).innerHTML = data['data'];
+      })
+    }
+
     function likeRecipe(ele) {
       req = $.ajax({
         data: { 'id': ele.name },

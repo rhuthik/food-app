@@ -8,7 +8,7 @@
   {% include "navbar.html" %}
   <div class="container shadow mt-5 p-5">
     <div class="text-center">
-      <img src="static/images/user default.png" class="rounded" alt="...">
+      <img src="{{ url_for('static', filename='images/user default.png') }}" class="rounded" alt="...">
       <br>
       <b>{{ user.username }}</b>
       <br>
@@ -17,11 +17,11 @@
       <div class="row mx-5 p-3">
         <div class="col">
           Followers<br>
-          {{ user.followers|length }}
+          {{ user.followers.all()|length }}
         </div>
         <div class="col">
           Following<br>
-          {{ user.following|length }}
+          {{ user.followed.all()|length }}
         </div>
       </div>
       </b></h6>
@@ -48,7 +48,7 @@
         Total number of likes recieved:
       </div>
       <div class="col">
-        xxx
+        {{ totalLikesRecieved }}
       </div>
     </div>
     <div class="accordion" id="accordionExample">
@@ -215,17 +215,16 @@
         <div class="card-header" id="headingThree">
           <h2 class="mb-0">
             <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-             From Subscribed Users
+             Users following
             </button>
           </h2>
         </div>
         <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
           <div class="card-body">
             <ul class="list-group">
-              <li class="list-group-item">recipe 1</li>
-              <li class="list-group-item">recipe 2</li>
-              <li class="list-group-item">recipe 3</li>
-              <li class="list-group-item">recipe 4</li>
+              {% for usr in user.followed.all() %}
+                <li class="list-group-item"><a href="{{ url_for('otherAccount', username=usr.username) }}" class="btn btn-link"> {{ usr.username }} </a></li>
+              {% endfor %}
             </ul>          
           </div>
         </div>

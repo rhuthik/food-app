@@ -237,6 +237,12 @@ def dislike() :
     else :
         return redirect(url_for('login'))
 
+def findTotalLikes(user) :
+    ans = 0
+    for recipe in user.recipes_authored :
+        ans = ans + len(recipe.users_liked)
+    return ans
+
 @app.route('/account', methods=['POST', 'GET'])
 def account() :
     if current_user.is_authenticated :
@@ -263,21 +269,24 @@ def account() :
                 passing_my_recipe.append(sub_rec)
             
             for recipe in liked_recipes : 
-                sub_rec = {}
-                sub_rec['recipe'] = recipe
-                if recipe in User.query.get(current_user.get_id()).recipes_liked :
-                    sub_rec['liked'] = True
-                else :
-                    sub_rec['liked'] = False
-                if recipe in User.query.get(current_user.get_id()).recipes_disliked :
-                    sub_rec['disliked'] = True
-                else :
-                    sub_rec['disliked'] = False
-                sub_rec['likes'] = len(recipe.users_liked)
-                sub_rec['dislikes'] = len(recipe.users_disliked)
-                passing_liked_recipes.append(sub_rec)
+                if recipe.author != User.query.get(current_user.get_id()) :
+                    sub_rec = {}
+                    sub_rec['recipe'] = recipe
+                    if recipe in User.query.get(current_user.get_id()).recipes_liked :
+                        sub_rec['liked'] = True
+                    else :
+                        sub_rec['liked'] = False
+                    if recipe in User.query.get(current_user.get_id()).recipes_disliked :
+                        sub_rec['disliked'] = True
+                    else :
+                        sub_rec['disliked'] = False
+                    sub_rec['likes'] = len(recipe.users_liked)
+                    sub_rec['dislikes'] = len(recipe.users_disliked)
+                    passing_liked_recipes.append(sub_rec)
 
-            return render_template('account.html', user=User.query.get(current_user.get_id()), my_recipe=passing_my_recipe, liked_recipes=passing_liked_recipes)
+            totalLikesRecieved = findTotalLikes(User.query.get(current_user.get_id()))
+
+            return render_template('account.html', totalLikesRecieved=totalLikesRecieved, user=User.query.get(current_user.get_id()), my_recipe=passing_my_recipe, liked_recipes=passing_liked_recipes)
         else :
             return redirect(url_for('emailverify'))
     else :
@@ -310,3 +319,31 @@ def verifyEmail(token) :
     db.session.commit()
     flash('Email has verified', 'success')
     return redirect(url_for('home'))
+
+@app.route('/users/<username>')
+def otherAccount(username) :
+    if username == User.query.get(current_user.get_id()).username :
+        return redirect(url_for('account'))
+    else :
+        user = User.query.filter_by(username=username).first()
+        totalLikesRecieved = findTotalLikes(user)
+        isFollowing = (User.query.get(current_user.get_id()) in user.followers.all())
+        print(isFollowing)
+
+        return render_template('otheraccount.html', isFollowing=isFollowing, user=user, totalLikesRecieved=totalLikesRecieved)
+
+@app.route('/follow', methods=['POST', 'GET'])
+def followUser() :
+    usrname = request.form['username']
+    user = User.query.filter_by(username=usrname).first()
+    if user == User.query.get(current_user.get_id()) :
+        return "Invalid operation"
+    else :
+        if User.query.get(current_user.get_id()) in user.followers :
+            user.followers.remove(User.query.get(current_user.get_id()))
+            db.session.commit()
+            return jsonify({ 'data' :  'Follow'})
+        else :
+            user.followers.append(User.query.get(current_user.get_id()))
+            db.session.commit()
+            return jsonify({ 'data' : 'Unfollow' })

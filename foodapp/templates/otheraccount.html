@@ -1,28 +1,32 @@
 {% extends "base.html" %}
   
   {% block TITLE %}
-<title>my account:(User name)</title>
+<title>my account:{{ user.username }}</title>
   {% endblock %}
 
   {% block content%}
   {% include "navbar.html" %}
   <div class="container shadow mt-5 p-5">
     <div class="text-center">
-      <img src="static/images/user default.png" class="rounded" alt="...">
+      <img src="{{ url_for('static', filename='images/user default.png') }}" class="rounded" alt="...">
       <br>
-      <b>(User name)</b>
+      <b>{{ user.username }}</b>
       <br>
-      <button type="button" class="btn btn-primary">Follow</button>
+      {% if isFollowing %}
+        <button id="user{{ user.username }}" type="button" class="btn btn-primary" onclick="followUser('{{ user.username }}')">Unfollow</button>
+      {% else %}
+        <button id="user{{ user.username }}" type="button" class="btn btn-primary" onclick="followUser('{{ user.username }}')">Follow</button>
+      {% endif %}
       <hr>
       <h6><b>
       <div class="row mx-5 p-3">
         <div class="col">
           Followers<br>
-          xx
+          {{ user.followers.all()|length }}
         </div>
         <div class="col">
           Following<br>
-          yy
+          {{ user.followed.all()|length }}
         </div>
       </div>
       </b></h6>
@@ -33,7 +37,7 @@
         Email id:
       </div>
       <div class="col">
-        (Email id)
+        {{ user.email }}
       </div>
     </div>
     <div class="row p-3">
@@ -41,7 +45,7 @@
         Number of recipies uploaded:
       </div>
       <div class="col">
-        xxx
+        {{ user.recipes_authored|length }}
       </div>
     </div>
     <div class="row p-3">
@@ -49,7 +53,7 @@
         Total number of likes recieved:
       </div>
       <div class="col">
-        xxx
+        {{ totalLikesRecieved }}
       </div>
     </div>
     <div class="accordion" id="accordionExample">

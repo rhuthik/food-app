@@ -23,9 +23,9 @@ favoritesTable = db.Table('favorites',
     db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id'))
 )
 
-followingTable = db.Table('follow',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
+followers = db.Table('followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
 
 @login_manager.user_loader
@@ -39,8 +39,7 @@ class User(db.Model, UserMixin):
     isEmailVerified = db.Column(db.Boolean, nullable=True , default=False)
     propic = db.Column(db.String(20), default='default.jpg', nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    followers = db.relationship('User', secondary=favoritesTable, back_populates='following')
-    following = db.relationship('User', secondary=favoritesTable, back_populates='followers')
+    followed = db.relationship('User', secondary=followers, primaryjoin=(followers.c.follower_id == id), secondaryjoin=(followers.c.followed_id == id), backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
     recipes_authored = db.relationship('Recipe', backref='author', lazy=True)
     favorite_recipes = db.relationship('Recipe', secondary=favoritesTable, back_populates='users_favorite')
     recipes_liked = db.relationship('Recipe', secondary=likeTable, back_populates='users_liked')
