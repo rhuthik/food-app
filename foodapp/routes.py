@@ -113,15 +113,19 @@ def add():
 @app.route("/delete/<id>", methods=['GET', 'POST'])
 def delete(id):
     recipe = Recipe.query.get(id)
-    if recipe.author == User.query.get(current_user.get_id()) :
-        if User.query.get(current_user.get_id()).isEmailVerified == True :
-            db.session.delete(recipe)
-            db.session.commit()
-            return jsonify({ 'data' : 'none' })
+
+    if current_user.is_authenticated :
+        if recipe.author == User.query.get(current_user.get_id()) :
+            if User.query.get(current_user.get_id()).isEmailVerified == True :
+                db.session.delete(recipe)
+                db.session.commit()
+                return redirect(url_for('account'))
+            else :
+                return redirect(url_for('emailverify'))
         else :
-            return redirect(url_for('emailverify'))
+            return "Unauthorized"
     else :
-        return "Unauthorized"
+        return redirect(url_for('login'))
 
 @app.route('/ingredientsearch', methods=['POST', 'GET'])
 def ingredientsearch() :
@@ -237,7 +241,43 @@ def dislike() :
 def account() :
     if current_user.is_authenticated :
         if User.query.get(current_user.get_id()).isEmailVerified == True :
-            return render_template('account.html', my_recipe=User.query.get(current_user.get_id()).recipes_authored, liked_recipes=User.query.get(current_user.get_id()).recipes_liked)
+            passing_my_recipe = []
+            passing_liked_recipes = []
+
+            my_recipes = User.query.get(current_user.get_id()).recipes_authored
+            liked_recipes = User.query.get(current_user.get_id()).recipes_liked
+
+            for recipe in my_recipes : 
+                sub_rec = {}
+                sub_rec['recipe'] = recipe
+                if recipe in User.query.get(current_user.get_id()).recipes_liked :
+                    sub_rec['liked'] = True
+                else :
+                    sub_rec['liked'] = False
+                if recipe in User.query.get(current_user.get_id()).recipes_disliked :
+                    sub_rec['disliked'] = True
+                else :
+                    sub_rec['disliked'] = False
+                sub_rec['likes'] = len(recipe.users_liked)
+                sub_rec['dislikes'] = len(recipe.users_disliked)
+                passing_my_recipe.append(sub_rec)
+            
+            for recipe in liked_recipes : 
+                sub_rec = {}
+                sub_rec['recipe'] = recipe
+                if recipe in User.query.get(current_user.get_id()).recipes_liked :
+                    sub_rec['liked'] = True
+                else :
+                    sub_rec['liked'] = False
+                if recipe in User.query.get(current_user.get_id()).recipes_disliked :
+                    sub_rec['disliked'] = True
+                else :
+                    sub_rec['disliked'] = False
+                sub_rec['likes'] = len(recipe.users_liked)
+                sub_rec['dislikes'] = len(recipe.users_disliked)
+                passing_liked_recipes.append(sub_rec)
+
+            return render_template('account.html', user=User.query.get(current_user.get_id()), my_recipe=passing_my_recipe, liked_recipes=passing_liked_recipes)
         else :
             return redirect(url_for('emailverify'))
     else :

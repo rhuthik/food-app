@@ -1,7 +1,7 @@
 {% extends "base.html" %}
   
   {% block TITLE %}
-<title>my account:(User name)</title>
+<title>my account:{{ user.username }}</title>
   {% endblock %}
 
   {% block content%}
@@ -10,18 +10,18 @@
     <div class="text-center">
       <img src="static/images/user default.png" class="rounded" alt="...">
       <br>
-      <b>(User name)</b>
+      <b>{{ user.username }}</b>
       <br>
       <hr>
       <h6><b>
       <div class="row mx-5 p-3">
         <div class="col">
           Followers<br>
-          xx
+          {{ user.followers|length }}
         </div>
         <div class="col">
           Following<br>
-          yy
+          {{ user.following|length }}
         </div>
       </div>
       </b></h6>
@@ -32,7 +32,7 @@
         Email id:
       </div>
       <div class="col">
-        (Email id)
+        {{ user.email }}
       </div>
     </div>
     <div class="row p-3">
@@ -40,7 +40,7 @@
         Number of recipies uploaded:
       </div>
       <div class="col">
-        xxx
+        {{ user.recipes_authored|length }}
       </div>
     </div>
     <div class="row p-3">
@@ -64,8 +64,60 @@
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
           <div class="card-body">
             <ul class="list-group">
-              {% for recipe in my_recipes %}
-                <li class="list-group-item">{{ recipe.name }}</li>
+              {% for recipe in my_recipe %}
+                <li class="list-group-item"><button type="button" class="btn btn-info btn-block text-left" data-toggle="modal" data-target="#exampleModal{{ recipe['recipe'].id }}">{{ recipe['recipe'].name }}</button></li>
+                <div class="modal fade" id="exampleModal{{ recipe['recipe'].id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">{{ recipe['recipe'].name }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                       <div class="row">
+                         <div class="col-4"> 
+                        <img class="card-img-top" src="{{ url_for('static', filename='images/recipe_pics/' + recipe['recipe'].image_file) }}" alt="Card image cap">
+                          </div>
+                        <div class="col-8">
+                       <h5>
+                          Ingredients :
+                       </h5>
+                       <p> <ol>
+                          {% for ing in recipe['recipe'].ingredients %}
+                           
+                          <li>  {{ ing.name }}</li>
+                          
+                          {% endfor %}
+                          </ol>
+                      </p>
+                        </div>
+                        </div>
+                      <hr>
+                      <ul class="list-group list-group-flush">
+                        <li >{{ recipe['recipe'].procedure }}</li>
+                      </ul>
+                      </div>
+                      <div class="modal-footer">
+                        <a href="{{ url_for('delete', id=recipe['recipe'].id) }}" class="btn btn-danger">Delete</a>
+                        {% if recipe['liked'] %}
+                      <button style="background-color: #0099cc;" id="likeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="likeRecipe(this)">Like {{ recipe['recipe'].users_liked|length }}</button>
+                        {% else %}
+                          <button style="background-color: white;" id="likeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="likeRecipe(this)">Like {{ recipe['recipe'].users_liked|length }}</button>
+                        {% endif %}
+              
+                        {% if recipe['disliked'] %}
+                          <button style="background-color: red;" id="dislikeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="dislikeRecipe(this)">Dislike {{ recipe['recipe'].users_disliked|length }}</button>
+                        {% else %}
+                          <button style="background-color: white;" id="dislikeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="dislikeRecipe(this)">Dislike {{ recipe['recipe'].users_disliked|length }}</button>
+                        {% endif %}
+                  
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               {% endfor %}
             </ul>
           </div>
@@ -83,7 +135,58 @@
           <div class="card-body">
             <ul class="list-group">
               {% for recipe in liked_recipes %}
-                <li class="list-group-item">{{ recipe.name }}</li>
+                <li class="list-group-item"><button type="button" class="btn btn-info btn-block text-left" data-toggle="modal" data-target="#exampleModal{{ recipe['recipe'].id }}">{{ recipe['recipe'].name }}</button></li>
+                <div class="modal fade" id="exampleModal{{ recipe['recipe'].id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">{{ recipe['recipe'].name }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                       <div class="row">
+                         <div class="col-4"> 
+                        <img class="card-img-top" src="{{ url_for('static', filename='images/recipe_pics/' + recipe['recipe'].image_file) }}" alt="Card image cap">
+                          </div>
+                        <div class="col-8">
+                       <h5>
+                          Ingredients :
+                       </h5>
+                       <p> <ol>
+                          {% for ing in recipe['recipe'].ingredients %}
+                           
+                          <li>  {{ ing.name }}</li>
+                          
+                          {% endfor %}
+                          </ol>
+                      </p>
+                        </div>
+                        </div>
+                      <hr>
+                      <ul class="list-group list-group-flush">
+                        <li >{{ recipe['recipe'].procedure }}</li>
+                      </ul>
+                      </div>
+                      <div class="modal-footer">
+                        {% if recipe['liked'] %}
+                      <button style="background-color: #0099cc;" id="likeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="likeRecipe(this)">Like {{ recipe['recipe'].users_liked|length }}</button>
+                        {% else %}
+                          <button style="background-color: white;" id="likeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="likeRecipe(this)">Like {{ recipe['recipe'].users_liked|length }}</button>
+                        {% endif %}
+              
+                        {% if recipe['disliked'] %}
+                          <button style="background-color: red;" id="dislikeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="dislikeRecipe(this)">Dislike {{ recipe['recipe'].users_disliked|length }}</button>
+                        {% else %}
+                          <button style="background-color: white;" id="dislikeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="dislikeRecipe(this)">Dislike {{ recipe['recipe'].users_disliked|length }}</button>
+                        {% endif %}
+                  
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               {% endfor %}
             </ul>          
           </div>
