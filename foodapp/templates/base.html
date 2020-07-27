@@ -128,34 +128,47 @@
       });
 
       $('#searchbox_ing').keyup(function () {
-        req = $.ajax({
-          data: { 'search': $('#searchbox_ing').val() },
-          type: 'POST',
-          url: '{{ url_for('ingredientsearch') }}'
-        });
+        if (document.getElementById('ing_radio').checked == true){
+          req = $.ajax({
+            data: { 'search': $('#searchbox_ing').val() },
+            type: 'POST',
+            url: '{{ url_for('ingredientsearch') }}'
+          });
 
-        req.done(function (data) {
-          $('#cont_ing').html('');
-          for (var i = 0; i < data['result'].length; i++) {
-            var btn = document.createElement("BUTTON");
-            btn.innerHTML = data['result'][i];
+          req.done(function (data) {
+            $('#cont_ing').html('');
+            for (var i = 0; i < data['result'].length; i++) {
+              var btn = document.createElement("BUTTON");
+              btn.innerHTML = data['result'][i];
 
-            btn.addEventListener('click', function () {
-              if (!ingredients_list.includes(this.innerHTML)) {
-                ingredients_list.push(this.innerHTML);
-                console.log(ingredients_list);
+              btn.addEventListener('click', function () {
+                if (!ingredients_list.includes(this.innerHTML)) {
+                  ingredients_list.push(this.innerHTML);
+                  console.log(ingredients_list);
 
-                $('#filterlist').html('');
-                for (var j = 0; j < ingredients_list.length; j++) {
-                  $('#filterlist').append('<span class="card bg-primary"><div class="card-body text-center">' + ingredients_list[j] + ' <a name="' + ingredients_list[j] + '" onclick="removeIngredient(this)">X</a></div></span>');
+                  $('#filterlist').html('');
+                  for (var j = 0; j < ingredients_list.length; j++) {
+                    $('#filterlist').append('<span class="card bg-primary"><div class="card-body text-center">' + ingredients_list[j] + ' <a name="' + ingredients_list[j] + '" onclick="removeIngredient(this)">X</a></div></span>');
+                  }
+                  recipeFilter();
                 }
-                recipeFilter();
-              }
-            });
+              });
 
-            document.getElementById('cont_ing').appendChild(btn);
-          }
-        });
+              document.getElementById('cont_ing').appendChild(btn);
+            }
+          });
+        }
+        else if(document.getElementById('dish_radio').checked == true){
+          req = $.ajax({
+            data: { 'dish' : $('#searchbox_ing').val(), 'info[]' : ingredients_list },
+            type: 'POST',
+            url: '{{ url_for('search_by_dish') }}'
+          });
+
+          req.done(function (data) {
+            $('#recipe_list').html(data.result);
+          });
+        }
       });
     });
   </script>

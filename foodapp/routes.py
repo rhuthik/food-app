@@ -5,7 +5,7 @@ from flask import Flask, render_template, url_for, redirect, flash, request, jso
 from foodapp.models import User, Recipe, Ingredient
 from foodapp import app, bcrypt, db, mail
 from foodapp.forms import RegistrationForm, LoginForm, AddRecipe, UpdateProfile
-from foodapp.utils import searching_by_dish_name, filter, findRecipe
+from foodapp.utils import searching_by_dish_name, filter, findRecipe, searching_by_dish_name
 from flask_login import login_user, logout_user, current_user
 from flask_mail import Message
 
@@ -137,15 +137,31 @@ def ingredientsearch() :
         ans = []
     return jsonify({ "result" : ans })
 
-@app.route('/dish', methods=['POST'])
+@app.route('/dish', methods=['POST', 'GET'])
 def search_by_dish():
-    dish = request.form['dish'] 
+    dish = request.form['dish']
+    ing_list = request.form.getlist('info[]')
     print(dish)
-    if len(dish) > 0 :
-        ans = searching_by_dish_name(dish)
-    else :
-        ans = []
-    return jsonify({'dish' : ans})
+    recipe_list = searching_by_dish_name(dish, ing_list)
+
+    passing_recipe_list = []
+    for recipe in recipe_list :
+        sub_rec = {}
+        sub_rec['recipe'] = recipe
+        if recipe in User.query.get(current_user.get_id()).recipes_liked :
+            sub_rec['liked'] = True
+        else :
+            sub_rec['liked'] = False
+        if recipe in User.query.get(current_user.get_id()).recipes_disliked :
+            sub_rec['disliked'] = True
+        else :
+            sub_rec['disliked'] = False
+        sub_rec['likes'] = len(recipe.users_liked)
+        sub_rec['dislikes'] = len(recipe.users_disliked)
+        print(sub_rec['recipe'].name + ": " + str(sub_rec['disliked']))
+        passing_recipe_list.append(sub_rec)
+    
+    return jsonify({'result' : render_template('recipelist.html', recipes=passing_recipe_list)})
 
 @app.route('/recipe', methods=['POST', 'GET'])
 def recipeFiltering() :

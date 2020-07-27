@@ -10,6 +10,11 @@
   {% block content%}
   {% include "navbar.html" %}
   <br>
+  <p>Please select search type :</p>
+  <label for="male">Ingredients</label>
+  <input type="radio" id="ing_radio" name="search_type_selection" value="Ingredients" checked="checked">
+  <label for="female" >Dish</label>
+  <input type="radio" id="dish_radio" name="search_type_selection" value="Dish"> <br>
 
   <div class="dropdown">
     <input class="dropbtn" id="searchbox_ing" placeholder="Search">
