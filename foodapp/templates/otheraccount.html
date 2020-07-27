@@ -8,7 +8,7 @@
   {% include "navbar.html" %}
   <div class="container shadow mt-5 p-5">
     <div class="text-center">
-      <img src="{{ url_for('static', filename='images/user default.png') }}" class="rounded" alt="...">
+      <img src="{{ url_for('static', filename='images/pro_pics/' + user.propic) }}" class="rounded" alt="...">
       <br>
       <b>{{ user.username }}</b>
       <br>

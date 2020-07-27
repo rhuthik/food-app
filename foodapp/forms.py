@@ -33,5 +33,9 @@ class LoginForm(FlaskForm):
 class AddRecipe(FlaskForm):
     recipe_name = StringField('Name of Recipe', validators=[DataRequired()])
     procedure = TextField('Procedure', widget=TextArea(), validators=[DataRequired()])
-    picture = FileField('Upload a picture', validators=[FileAllowed(['jpg', 'png'])])
+    picture = FileField('Upload a picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
     submit = SubmitField('Add')
+
+class UpdateProfile(FlaskForm):
+    profile_pic = FileField('Upload new profile', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+    submit = SubmitField('Update')

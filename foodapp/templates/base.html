@@ -104,6 +104,14 @@
     }
 
     $(document).ready(function () {
+
+      r = $.post("{{ url_for('filteredrecipe') }}", { 'info[]': ingredients_list });
+
+      r.done(function (data) {
+        console.log(data.result);
+        $('#recipe_list').html(data.result);
+      });
+
       $('#searchbox_rec').keyup(function () {
         req = $.ajax({
           data: { dish: $('#searchbox_rec').val() },
@@ -124,7 +132,7 @@
           data: { 'search': $('#searchbox_ing').val() },
           type: 'POST',
           url: '{{ url_for('ingredientsearch') }}'
-      });
+        });
 
         req.done(function (data) {
           $('#cont_ing').html('');

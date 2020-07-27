@@ -8,8 +8,20 @@
   {% include "navbar.html" %}
   <div class="container shadow mt-5 p-5">
     <div class="text-center">
-      <img src="{{ url_for('static', filename='images/user default.png') }}" class="rounded" alt="...">
-      <br>
+      <img src="{{ url_for('static', filename='images/pro_pics/' + user.propic) }}" class="rounded" alt="...">
+      <br><br><br>
+      <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        Change profile pic : {{ form.profile_pic() }} 
+        <br><br>
+        {{ form.submit(class="btn btn-primary") }}
+        {% if form.profile_pic.errors %}
+          {% for error in form.profile_pic.errors %}
+            <p class="alert alert-danger">{{ error }}</p>
+          {% endfor %}
+        {% endif %}
+      </form>
+      <br><br><br>
       <b>{{ user.username }}</b>
       <br>
       <hr>

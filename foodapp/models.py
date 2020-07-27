@@ -37,7 +37,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     isEmailVerified = db.Column(db.Boolean, nullable=True , default=False)
-    propic = db.Column(db.String(20), default='default.jpg', nullable=False)
+    propic = db.Column(db.String(20), default='default.png', nullable=False)
     password = db.Column(db.String(60), nullable=False)
     followed = db.relationship('User', secondary=followers, primaryjoin=(followers.c.follower_id == id), secondaryjoin=(followers.c.followed_id == id), backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
     recipes_authored = db.relationship('Recipe', backref='author', lazy=True)

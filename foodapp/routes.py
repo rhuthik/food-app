@@ -4,7 +4,7 @@ from PIL import Image
 from flask import Flask, render_template, url_for, redirect, flash, request, jsonify
 from foodapp.models import User, Recipe, Ingredient
 from foodapp import app, bcrypt, db, mail
-from foodapp.forms import RegistrationForm, LoginForm, AddRecipe
+from foodapp.forms import RegistrationForm, LoginForm, AddRecipe, UpdateProfile
 from foodapp.utils import searching_by_dish_name, filter, findRecipe
 from flask_login import login_user, logout_user, current_user
 from flask_mail import Message
@@ -243,10 +243,34 @@ def findTotalLikes(user) :
         ans = ans + len(recipe.users_liked)
     return ans
 
+def save_pro_picture(form_picture) :
+    ran_hex = secrets.token_hex(8)
+    _, f_extension = os.path.splitext(form_picture.filename)
+    picture_fn = ran_hex + f_extension
+    picture_path = os.path.join(app.root_path, 'static/images/pro_pics', picture_fn)
+
+    output_size = (165,165)
+    i = Image.open(form_picture)
+    new_i = i.resize(output_size)
+    new_i.save(picture_path)
+
+    return picture_fn
+
 @app.route('/account', methods=['POST', 'GET'])
 def account() :
+    form = UpdateProfile()
+
     if current_user.is_authenticated :
         if User.query.get(current_user.get_id()).isEmailVerified == True :
+
+            if form.validate_on_submit() :
+                if form.profile_pic.data :
+                    picture_file = save_pro_picture(form.profile_pic.data)
+                    User.query.get(current_user.get_id()).propic = picture_file
+                    db.session.commit()
+                    
+                    return redirect(url_for('account'))
+
             passing_my_recipe = []
             passing_liked_recipes = []
 
@@ -286,7 +310,7 @@ def account() :
 
             totalLikesRecieved = findTotalLikes(User.query.get(current_user.get_id()))
 
-            return render_template('account.html', totalLikesRecieved=totalLikesRecieved, user=User.query.get(current_user.get_id()), my_recipe=passing_my_recipe, liked_recipes=passing_liked_recipes)
+            return render_template('account.html', form=form, totalLikesRecieved=totalLikesRecieved, user=User.query.get(current_user.get_id()), my_recipe=passing_my_recipe, liked_recipes=passing_liked_recipes)
         else :
             return redirect(url_for('emailverify'))
     else :
