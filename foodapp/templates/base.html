@@ -138,7 +138,9 @@
           req.done(function (data) {
             $('#cont_ing').html('');
             for (var i = 0; i < data['result'].length; i++) {
-              var btn = document.createElement("BUTTON");
+              var btn = document.createElement("A");
+              btn.classList.add("dropdown-item");
+              btn.href="#";
               btn.innerHTML = data['result'][i];
 
               btn.addEventListener('click', function () {
