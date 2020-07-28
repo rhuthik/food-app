@@ -112,21 +112,6 @@
         $('#recipe_list').html(data.result);
       });
 
-      $('#searchbox_rec').keyup(function () {
-        req = $.ajax({
-          data: { dish: $('#searchbox_rec').val() },
-          type: 'POST',
-          url: 'search_by_dish'
-        });
-
-        req.done(function (data) {
-          $('#cont_rec').html('');
-          for (var i = 0; i < data['result'].length; i++) {
-            $('#cont_rec').append('<button>' + data['result'][i] + '</button>');
-          }
-        });
-      });
-
       $('#searchbox_ing').keyup(function () {
         if (document.getElementById('ing_radio').checked == true){
           req = $.ajax({
