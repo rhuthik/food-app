@@ -4,7 +4,7 @@ from PIL import Image
 from flask import Flask, render_template, url_for, redirect, flash, request, jsonify
 from foodapp.models import User, Recipe, Ingredient
 from foodapp import app, bcrypt, db, mail
-from foodapp.forms import RegistrationForm, LoginForm, AddRecipe, UpdateProfile
+from foodapp.forms import RegistrationForm, LoginForm, AddRecipe, UpdateProfile, ChangePassword, EmailPassword
 from foodapp.utils import searching_by_dish_name, filter, findRecipe, searching_by_dish_name
 from flask_login import login_user, logout_user, current_user
 from flask_mail import Message
@@ -140,9 +140,10 @@ def ingredientsearch() :
 @app.route('/dish', methods=['POST', 'GET'])
 def search_by_dish():
     dish = request.form['dish']
+    typeOfSearch = request.form['type']
     ing_list = request.form.getlist('info[]')
     print(dish)
-    recipe_list = searching_by_dish_name(dish, ing_list)
+    recipe_list = searching_by_dish_name(dish, ing_list, typeOfSearch)
 
     passing_recipe_list = []
     for recipe in recipe_list :
@@ -177,7 +178,9 @@ def recipeFiltering() :
 @app.route('/filter', methods=['POST', 'GET'])
 def filteredrecipe() :
     ing_list = request.form.getlist('info[]')
-    recipe_list = findRecipe(ing_list)
+    typeOfSearch = str(request.form['type'])
+    recipeSearch = request.form['dish']
+    recipe_list = searching_by_dish_name(recipeSearch, ing_list, typeOfSearch)
 
     passing_recipe_list = []
     for recipe in recipe_list :
@@ -409,3 +412,40 @@ def followUser() :
             user.followers.append(User.query.get(current_user.get_id()))
             db.session.commit()
             return jsonify({ 'data' : 'Unfollow' })
+
+def send_email_password(user) :
+    token = user.get_token()
+    msg = Message('Password Change Request', sender='foodappverify@gmail.com', recipients=[user.email])
+    msg.body = f"""Hi {user.username}, To change the password go to the following link  
+{url_for('password_change', token=token, _external=True)}
+"""
+    mail.send(msg)
+
+@app.route('/emailpassword', methods=['POST', 'GET'])
+def emailpassword() :
+    if current_user.is_authenticated :
+        return redirect(url_for('home'))
+    else :
+        form = EmailPassword()
+        if form.validate_on_submit():
+            user = User.query.filter_by(email=form.email.data).first()
+            if user :
+                send_email_password(user)
+                return render_template('message.html')
+            else :
+                flash('No account is registered with the given email address', 'danger')
+                return render_template('change_password.html', form=form)
+        return render_template('change_password.html', form=form)
+
+@app.route('/password/<token>', methods=['POST', 'GET'])
+def password_change(token) :
+    form = ChangePassword()
+    user = User.verify_token(token)
+    if user is None :
+        return "Invalid token or token has expired"
+    else :
+        if form.validate_on_submit():
+            user.password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            db.session.commit()
+            return redirect(url_for('login'))
+        return render_template('password.html', form=form)

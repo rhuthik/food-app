@@ -1,35 +1,46 @@
 {% extends "base.html" %}
-  
-  {% block TITLE %}
 
-  <title>Home</title>
-  
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/searchbox.css') }}">
+{% block TITLE %}
 
-  {% endblock %}
+<title>Home</title>
 
-  {% block content%}
-  {% include "navbar.html" %}
-  <br>
-  <p>Please select search type :</p>
-  <label for="male">Ingredients</label>
-  <input type="radio" id="ing_radio" name="search_type_selection" value="Ingredients" checked="checked">
-  <label for="female" >Dish</label>
-  <input type="radio" id="dish_radio" name="search_type_selection" value="Dish">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/searchbox.css') }}">
 
-  <div class="dropdown">
-    <input class="form-control mr-sm-2" id="searchbox_ing" placeholder="Search">
-    <div class="dropdown-content" id="cont_ing">
-        
-    </div>
+{% endblock %}
+
+{% block content%}
+{% include "navbar.html" %}
+<br>
+<div class="row">
+  <div class="col col-md-6 col-sm-12">
+    <p>Please select search type :</p>
+    <label for="ing">Ingredients</label>
+    <input type="radio" id="ing_radio" name="search_type_selection" value="Ingredients" checked="checked"><br>
+    <label for="dish">Dish</label>
+    <input type="radio" id="dish_radio" name="search_type_selection" value="Dish">
   </div>
+  <div class="col col-md-6 col-sm-12">
+    <p>Please select sort type :</p>
+    <label for="like">Sort by likes</label>
+    <input type="radio" id="like_sort_radio" onclick="recipeFilter('like')" name="sort_type_selection" value="likeSort" checked="checked"><br>
+    <label for="alpha">Sort in alphabetical order</label>
+    <input type="radio" id="alpha_sort_radio" onclick="recipeFilter('alpha')" name="sort_type_selection" value="alphaSort">
+  </div>
+</div>
 
-  <div id="filterlist" class="row pt-2">
+<div class="dropdown">
+  <input class="form-control mr-sm-2" id="searchbox_ing" placeholder="Search">
+  <div class="dropdown-content" id="cont_ing">
 
   </div>
+</div>
 
-  <br><br>
-  <div id="recipe_list" class="card-columns">
-  
-  </div>
-  {% endblock %}
+<div id="filterlist" class="row pt-2">
+
+</div>
+
+<br><br>
+<div id="recipe_list" class="card-columns">
+
+</div>
+{% endblock %}

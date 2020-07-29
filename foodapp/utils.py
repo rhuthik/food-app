@@ -22,7 +22,13 @@ def filter(string) :
 
 # Here the list of ingredients selected by the user is passed into the function
 
-def findRecipe(ingredients) :
+def alphaKey(ele) :
+    return ele.name.lower()
+
+def likeKey(ele) :
+    return len(ele.users_liked)
+
+def findRecipe(ingredients, typeOfSearch) :
     result = set()
 
     for i in Recipe.query.all() :
@@ -35,11 +41,19 @@ def findRecipe(ingredients) :
                 subset.add(p)
         result = result.intersection(subset)
     
-    print(result)
+    ans = list(result)
 
-    return result
+    if typeOfSearch == 'alpha' :
+        ans.sort(key=alphaKey)
+        print(ans)
+        return ans
+    else :
+        ans.sort(key=likeKey)
+        print(ans)
+        return ans
 
-def searching_by_dish_name(dish, ingredients) :
+
+def searching_by_dish_name(dish, ingredients, typeOfSearch) :
     shortList = []
     search = "%{}%".format(dish)
     for i in Recipe.query.filter(Recipe.name.like(search)).all():
@@ -57,7 +71,14 @@ def searching_by_dish_name(dish, ingredients) :
                 subset.add(p)
         result = result.intersection(subset)
     
-    print(result)
+    ans = list(result)
 
-    return result
+    if typeOfSearch == 'like' :
+        ans.sort(key=likeKey, reverse=True)
+        print(ans)
+        return ans
+    else :
+        ans.sort(key=alphaKey)
+        print(ans)
+        return ans
 
