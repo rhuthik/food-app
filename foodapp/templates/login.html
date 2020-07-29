@@ -38,7 +38,10 @@
               </div>
               {{ form.submit(class="btn btn-primary") }}
               <br><br>
-              Don't have an account? <a href="{{ url_for('reg') }}" >Sign Up</a>
+              Forgot password? <a href="{{ url_for('emailpassword') }}" >Click here</a>
+              <br><br>
+              Don't have an account? <a href="{{ url_for('reg') }}" >Sign Up</a><br>
+              
               {% with messages = get_flashed_messages(with_categories=true) %}
                   {% if messages %}
                       {% for category, message in messages %}

@@ -39,3 +39,12 @@ class AddRecipe(FlaskForm):
 class UpdateProfile(FlaskForm):
     profile_pic = FileField('Upload new profile', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
     submit = SubmitField('Update')
+
+class EmailPassword(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Submit')
+
+class ChangePassword(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=20)])
+    confirm_password = PasswordField('Confirm password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Submit')
