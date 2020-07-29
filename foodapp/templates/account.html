@@ -112,6 +112,7 @@
                       </ul>
                       </div>
                       <div class="modal-footer">
+                        Added By : <a href="{{ url_for('otherAccount', username=recipe['recipe'].author.username) }}" class="btn btn-link">{{ recipe['recipe'].author.username}}</a>
                         <a href="{{ url_for('delete', id=recipe['recipe'].id) }}" class="btn btn-danger">Delete</a>
                         {% if recipe['liked'] %}
                       <button style="background-color: #0099cc;" id="likeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="likeRecipe(this)">Like {{ recipe['recipe'].users_liked|length }}</button>
@@ -182,6 +183,7 @@
                       </ul>
                       </div>
                       <div class="modal-footer">
+                        Added By : <a href="{{ url_for('otherAccount', username=recipe['recipe'].author.username) }}" class="btn btn-link">{{ recipe['recipe'].author.username}}</a>
                         {% if recipe['liked'] %}
                       <button style="background-color: #0099cc;" id="likeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="likeRecipe(this)">Like {{ recipe['recipe'].users_liked|length }}</button>
                         {% else %}
@@ -208,11 +210,29 @@
         <div class="card-header" id="headingThree">
           <h2 class="mb-0">
             <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-             Users following
+             Followers
             </button>
           </h2>
         </div>
         <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+          <div class="card-body">
+            <ul class="list-group">
+              {% for usr in user.followers.all() %}
+                <li class="list-group-item"><a href="{{ url_for('otherAccount', username=usr.username) }}" class="btn btn-link"> {{ usr.username }} </a></li>
+              {% endfor %}
+            </ul>          
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header" id="headingFour">
+          <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+             Following 
+            </button>
+          </h2>
+        </div>
+        <div id="collapseFive" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
           <div class="card-body">
             <ul class="list-group">
               {% for usr in user.followed.all() %}

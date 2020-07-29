@@ -105,6 +105,7 @@
                         </ul>
                         </div>
                         <div class="modal-footer">
+                          Added By : <a href="{{ url_for('otherAccount', username=recipe['recipe'].author.username) }}" class="btn btn-link">{{ recipe['recipe'].author.username}}</a>
                           {% if recipe['liked'] %}
                         <button style="background-color: #0099cc;" id="likeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="likeRecipe(this)">Like {{ recipe['recipe'].users_liked|length }}</button>
                           {% else %}
