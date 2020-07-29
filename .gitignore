@@ -5,3 +5,5 @@
 *.pyc
 /foodapp/test.db
 /venv
+/foodapp/static/images/pro_pics
+/foodapp/static/images/recipe_pics

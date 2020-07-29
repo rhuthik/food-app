@@ -373,7 +373,26 @@ def otherAccount(username) :
         isFollowing = (User.query.get(current_user.get_id()) in user.followers.all())
         print(isFollowing)
 
-        return render_template('otheraccount.html', isFollowing=isFollowing, user=user, totalLikesRecieved=totalLikesRecieved)
+        recipes = User.query.filter_by(username=username).first().recipes_authored
+
+        passing_recipes = []
+
+        for recipe in recipes : 
+                sub_rec = {}
+                sub_rec['recipe'] = recipe
+                if recipe in User.query.get(current_user.get_id()).recipes_liked :
+                    sub_rec['liked'] = True
+                else :
+                    sub_rec['liked'] = False
+                if recipe in User.query.get(current_user.get_id()).recipes_disliked :
+                    sub_rec['disliked'] = True
+                else :
+                    sub_rec['disliked'] = False
+                sub_rec['likes'] = len(recipe.users_liked)
+                sub_rec['dislikes'] = len(recipe.users_disliked)
+                passing_recipes.append(sub_rec)
+
+        return render_template('otheraccount.html', recipes_authored=passing_recipes, isFollowing=isFollowing, user=user, totalLikesRecieved=totalLikesRecieved)
 
 @app.route('/follow', methods=['POST', 'GET'])
 def followUser() :

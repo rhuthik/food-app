@@ -12,7 +12,7 @@ db.session.commit()
 with open('seed-resource/train.json') as json_file:
     data = json.loads(json_file.read())
     for recipe in data:
-        rec = Recipe(name=recipe['cuisine'], procedure="lorem ipsum")
+        rec = Recipe(name=recipe['cuisine'], procedure="lorem ipsum", author=user)
         db.session.add(rec)
         db.session.commit()
         for ing in recipe['ingredients']:
