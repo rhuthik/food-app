@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+  
+  {% block TITLE %}
+<title>my account:{{ user.username }}</title>
+  {% endblock %}
+
+  {% block content%}
+  {% include "navbar.html" %}
+  <div class="container shadow mt-5 p-5">
+    <div class="text-center">
+      <img src="{{ url_for('static', filename='images/pro_pics/' + user.propic) }}" class="rounded" alt="...">
+      <br>
+      <b>{{ user.username }}</b>
+      <br>
+      {% if isFollowing %}
+        <button id="user{{ user.username }}" type="button" class="btn btn-primary" onclick="followUser('{{ user.username }}')">Unfollow</button>
+      {% else %}
+        <button id="user{{ user.username }}" type="button" class="btn btn-primary" onclick="followUser('{{ user.username }}')">Follow</button>
+      {% endif %}
+      <hr>
+      <h6><b>
+      <div class="row mx-5 p-3">
+        <div class="col">
+          Followers<br>
+          {{ user.followers.all()|length }}
+        </div>
+        <div class="col">
+          Following<br>
+          {{ user.followed.all()|length }}
+        </div>
+      </div>
+      </b></h6>
+      <hr>
+    </div>
+    <div class="row p-3">
+      <div class="col">
+        Email id:
+      </div>
+      <div class="col">
+        {{ user.email }}
+      </div>
+    </div>
+    <div class="row p-3">
+      <div class="col">
+        Number of recipies uploaded:
+      </div>
+      <div class="col">
+        {{ user.recipes_authored|length }}
+      </div>
+    </div>
+    <div class="row p-3">
+      <div class="col">
+        Total number of likes recieved:
+      </div>
+      <div class="col">
+        {{ totalLikesRecieved }}
+      </div>
+    </div>
+    <div class="accordion" id="accordionExample">
+      <div class="card">
+        <div class="card-header" id="headingOne">
+          <h2 class="mb-0">
+            <button class="btn btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="flase" aria-controls="collapseOne">
+              Auther's Recipes
+            </button>
+          </h2>
+        </div>
+    
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+          <div class="card-body">
+            <ul class="list-group">
+                {% for recipe in recipes_authored %}
+                  <li class="list-group-item"><button type="button" class="btn btn-info btn-block text-left" data-toggle="modal" data-target="#exampleModal{{ recipe['recipe'].id }}">{{ recipe['recipe'].name }}</button></li>
+                  <div class="modal fade" id="exampleModal{{ recipe['recipe'].id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">{{ recipe['recipe'].name }}</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                        <div class="row">
+                          <div class="col-4"> 
+                          <img class="card-img-top" src="{{ url_for('static', filename='images/recipe_pics/' + recipe['recipe'].image_file) }}" alt="Card image cap">
+                            </div>
+                          <div class="col-8">
+                        <h5>
+                            Ingredients :
+                        </h5>
+                        <p> <ol>
+                            {% for ing in recipe['recipe'].ingredients %}
+                            
+                            <li>  {{ ing.name }}</li>
+                            
+                            {% endfor %}
+                            </ol>
+                        </p>
+                          </div>
+                          </div>
+                        <hr>
+                        <ul class="list-group list-group-flush">
+                          <li >{{ recipe['recipe'].procedure }}</li>
+                        </ul>
+                        </div>
+                        <div class="modal-footer">
+                          Added By : <a href="{{ url_for('otherAccount', username=recipe['recipe'].author.username) }}" class="btn btn-link">{{ recipe['recipe'].author.username}}</a>
+                          {% if recipe['liked'] %}
+                        <button style="background-color: #0099cc;" id="likeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="likeRecipe(this)">Like {{ recipe['recipe'].users_liked|length }}</button>
+                          {% else %}
+                            <button style="background-color: white;" id="likeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="likeRecipe(this)">Like {{ recipe['recipe'].users_liked|length }}</button>
+                          {% endif %}
+                
+                          {% if recipe['disliked'] %}
+                            <button style="background-color: red;" id="dislikeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="dislikeRecipe(this)">Dislike {{ recipe['recipe'].users_disliked|length }}</button>
+                          {% else %}
+                            <button style="background-color: white;" id="dislikeBut{{ recipe['recipe'].id }}" name="{{ recipe['recipe'].id }}" onclick="dislikeRecipe(this)">Dislike {{ recipe['recipe'].users_disliked|length }}</button>
+                          {% endif %}
+                    
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

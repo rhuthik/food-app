@@ -14,12 +14,12 @@
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Menu
+          Me
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="{{ url_for('account') }}">my Account</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Sign Out</a>
+          <a class="dropdown-item" href="{{ url_for('logout') }}">Sign Out</a>
         </div>
       </li>
     </ul>
@@ -29,3 +29,12 @@
     </form>
   </div>
 </nav>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{category}} mt-2">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}

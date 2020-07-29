@@ -55,12 +55,7 @@
                     });
                     document.getElementById('cont_ing').appendChild(btn);
                 }
-                if(data['result'].length != 0 || $('#searchbox_ing').val() == ''){
-                    document.getElementById("addBtn").style.display = "none";
-                }
-                else{
-                    document.getElementById("addBtn").style.display = "inline";
-                }
+                
               });
             });    
           });
@@ -69,7 +64,7 @@
 {% endblock %}
 
 {% block content %}
-
+{% include "navbar.html" %}
         <form method="POST" enctype="multipart/form-data">
             
             <div class="form-group">
@@ -82,6 +77,7 @@
                 <div class="dropdown">
                     <div class="input-group mb-3">
                         <input id="searchbox_ing" type="text" class="form-control" placeholder="Ingredient" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <input type="radio" id="ing_radio" name="search_type_selection" value="Ingredients" checked="checked">
                         <div class="input-group-append">
                           <button type="button" id="addBtn" class="btn btn-outline-secondary" onclick="addButton()">Add</button>
                         </div>

@@ -1,89 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Sign Up</title>
+{% extends "base.html" %}
 
-    <!-- Font Icon -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/material-icon/css/material-design-iconic-font.min.css') }}">
+{% block TITLE %}
+<title>Sign Up</title>
+{% endblock %}
 
-    <!-- Main css -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
+{% block content %}
 
-    <div class="main">
-
-        <!-- Sign up form -->
-        <section class="signup">
-            <div class="container">
-                <div class="signup-content">
-                    <div class="signup-form">
-                        <h2 class="form-title">Sign up</h2>
-                        <form method="POST" class="register-form" id="register-form">
-                            {{ form.hidden_tag() }}
-
-                            {% if form.username.errors %}
-                                {% for error in form.username.errors %}
-                                    <p style="font-size: 10px; color: red;">{{ error }}</p>
-                                {% endfor %}
-                            {% endif %}
-                            <div class="form-group">
-                                <label for="name">   
-                                <i class="zmdi zmdi-account material-icons-name"></i></label>
-                                {{ form.username(placeholder="Username") }}
-                            </div>
-                            {% if form.email.errors %}
-                                {% for error in form.email.errors %}
-                                    <p style="font-size: 10px; color: red;">{{ error }}</p>
-                                {% endfor %}
-                            {% endif %}
-                            <div class="form-group">
-                                <label for="email"><i class="zmdi zmdi-email"></i></label>
-                                {{ form.email(placeholder="Email") }}
-                            </div>
-                            {% if form.password.errors %}
-                                {% for error in form.password.errors %}
-                                    <p style="font-size: 10px; color: red;">{{ error }}</p>
-                                {% endfor %}
-                            {% endif %}
-                            <div class="form-group">
-                                <label for="pass"><i class="zmdi zmdi-lock"></i></label>
-                                {{ form.password(placeholder="Password") }}
-                            </div>
-                            {% if form.confirm_password.errors %}
-                                {% for error in form.confirm_password.errors %}
-                                    <p style="font-size: 10px; color: red;">{{ error }}</p>
-                                {% endfor %}
-                            {% endif %}
-                            <div class="form-group">
-                                <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
-                                {{ form.confirm_password(placeholder="Confirnm password") }}
-                            </div>
-                            
-                            <div class="form-group form-button">
-                                {{ form.submit }}
-                            </div>
-                        </form>
-                    </div>
-                    <div class="signup-image">
-                        <figure><img src="{{ url_for('static', filename='images/signup-image.jpg') }}" alt="sing up image"></figure>
-                        <a href="#" class="signup-image-link">I am already member</a>
-                    </div>
-                    
-                </div>
-            </div>
-        </section>
-
-        
-        
-
+  <div class="shadow-lg container-fluid m-0 p-5">
+    <div class="row">
+      <div class="col">
+        <div class="text-center mb-5">
+          <img class="img-fluid" src="{{ url_for('static', filename='images/Logo.png') }}">
+        </div>
+        <form method="POST">
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+            <label for="exampleInputUsername1">Username</label>
+            {{ form.username(placeholder="Username", class="form-control border-top-0 border-left-0 border-right-0", id="exampleInputUsername1") }}
+            {% if form.username.errors %}
+            {% for error in form.username.errors %}
+            <small id="emailHelp" class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            {{ form.email(placeholder="Email", class="form-control border-top-0 border-left-0 border-right-0", id="exampleInputEmail1") }}
+            {% if form.email.errors %}
+            {% for error in form.email.errors %}
+            <small id="emailHelp" class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            {{ form.password(placeholder="password", class="form-control border-top-0 border-left-0 border-right-0", id="exampleInputPassword1") }}
+            {% if form.password.errors %}
+            {% for error in form.password.errors %}
+            <small id="emailHelp" class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="exampleInputConfirmPassword1">Confirm password</label>
+            {{ form.confirm_password(placeholder="confirm password", class="form-control border-top-0 border-left-0 border-right-0", id="exampleInputPassword1") }}
+            {% if form.confirm_password.errors %}
+            {% for error in form.confirm_password.errors %}
+            <small id="emailHelp" class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+            {% endif %}
+          </div>
+          {{ form.submit(class="btn btn-primary") }}
+          <br><br>
+          Already have an account ? <a href="{{ url_for('login') }}">Log In</a>
+        </form>
+      </div>
     </div>
+  </div>
 
-    <!-- JS -->
-    <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
-    <script src="js/main.js"></script>
-</body>
-</html>
+{% endblock %}

@@ -16,8 +16,8 @@
     text-align: left;
     display: block;
     position: absolute;
-    background-color: #f9f9f9;
-    width: 300px;
+    background-color: #ffffff;
+    width: 235px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
   }
@@ -41,6 +41,6 @@
     background-color:white;
   }
 
-  #addBtn {
-      display: none;
+  #ing_radio {
+    display: none;
   }
