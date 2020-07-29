@@ -49,7 +49,9 @@
                 {% endfor %}
               {% endif %}
             </div>
-            {{ form.submit(class="btn btn-primary") }} <a href="{{ url_for('login') }}" >Log In</a>
+            {{ form.submit(class="btn btn-primary") }} 
+            <br><br>
+            Already have an account ? <a href="{{ url_for('login') }}" >Log In</a>
           </form>
           </div>
           </div>
