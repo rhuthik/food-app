@@ -140,9 +140,10 @@ def ingredientsearch() :
 @app.route('/dish', methods=['POST', 'GET'])
 def search_by_dish():
     dish = request.form['dish']
+    typeOfSearch = request.form['type']
     ing_list = request.form.getlist('info[]')
     print(dish)
-    recipe_list = searching_by_dish_name(dish, ing_list)
+    recipe_list = searching_by_dish_name(dish, ing_list, typeOfSearch)
 
     passing_recipe_list = []
     for recipe in recipe_list :
@@ -177,7 +178,9 @@ def recipeFiltering() :
 @app.route('/filter', methods=['POST', 'GET'])
 def filteredrecipe() :
     ing_list = request.form.getlist('info[]')
-    recipe_list = findRecipe(ing_list)
+    typeOfSearch = str(request.form['type'])
+    recipeSearch = request.form['dish']
+    recipe_list = searching_by_dish_name(recipeSearch, ing_list, typeOfSearch)
 
     passing_recipe_list = []
     for recipe in recipe_list :
