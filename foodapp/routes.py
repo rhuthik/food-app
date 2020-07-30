@@ -28,7 +28,6 @@ def reg():
 @app.route("/login", methods=['POST', 'GET'])
 def login():
     if current_user.is_authenticated :
-        flash('Login successfull, Welcome '+User.query.get(current_user.get_id()).username, 'success')
         return redirect(url_for('home'))
     else :
         form = LoginForm()
@@ -36,6 +35,7 @@ def login():
             user = User.query.filter_by(email=form.email.data).first()
             if user and bcrypt.check_password_hash(user.password, form.password.data) :
                 login_user(user, remember=form.remember.data)
+                flash('Login successful, Welcome '+User.query.get(current_user.get_id()).username, 'success')
                 return redirect(url_for('home'))
             else :
                 flash('The email or password you have entered is incorrect. Please try again', 'danger')

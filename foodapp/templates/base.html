@@ -80,8 +80,11 @@
       var e = document.getElementById('sort_by');
       var sort_type = e.options[e.selectedIndex].value;
 
+      var ele = document.getElementById('search_by');
+      var search_by = ele.options[ele.selectedIndex].value;
+
       dishname = '';
-      if(document.getElementById('dish_radio').checked == true){
+      if(search_by == 'dish'){
         dishname = $('#searchbox_ing').val();
       }
       $('#filterlist').html('');
@@ -121,8 +124,10 @@
       });
 
       function callOnKeyup() {
+        var ele = document.getElementById('search_by');
+        var search_by = ele.options[ele.selectedIndex].value;
 
-        if (document.getElementById('ing_radio').checked == true) {
+        if (search_by == 'ingredient') {
             req = $.ajax({
               data: { 'search': $('#searchbox_ing').val() },
               type: 'POST',
@@ -155,7 +160,7 @@
             });
           
         }
-        else if (document.getElementById('dish_radio').checked == true) {
+        else if (search_by == 'dish') {
             recipeFilter()
         }
       }

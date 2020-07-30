@@ -12,26 +12,28 @@
 {% include "navbar.html" %}
 <br>
 <div class="row">
-  <div class="col col-md-6 col-sm-12">
-    <p class="my-0">Search by:</p>
-    <label for="ing">Ingredients</label>
-    <input type="radio" id="ing_radio" name="search_type_selection" value="Ingredients" checked="checked">
-    <label for="dish">Dish</label>
-    <input type="radio" id="dish_radio" name="search_type_selection" value="Dish">
+  <div class="col-sm-3 my-1">
+    <select class="custom-select w-100" id="search_by">
+      <option value="ingredient" selected="selected">Search by ingredients</option>
+      <option value="dish">Search by recipe</option>
+    </select>
   </div>
- 
-  <div class="col col-md-6 col-sm-12 text-right">
-    <select class="custom-select w-50" id="sort_by" onchange="recipeFilter()">
+  <div class="col-sm-3 my-1">
+    <div class="dropdown w-100">
+      <input class="form-control w-100" id="searchbox_ing" placeholder="Search">
+      <div class="dropdown-content" id="cont_ing">
+
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+
+  </div>
+  <div class="col-sm-3 text-sm-left text-md-right my-1">
+    <select class="custom-select w-100" id="sort_by" onchange="recipeFilter()">
       <option value="like" selected="selected">Sort by like</option>
       <option value="alpha">Sort in alphabetical order</option>
     </select>
-  </div>
-</div>
-
-<div class="dropdown">
-  <input class="form-control mr-sm-2" id="searchbox_ing" placeholder="Search">
-  <div class="dropdown-content" id="cont_ing">
-
   </div>
 </div>
 
