@@ -82,3 +82,35 @@ def searching_by_dish_name(dish, ingredients, typeOfSearch) :
         print(ans)
         return ans
 
+def shortlist_algo(dish, ingredients, typeOfSearch) :
+    shortList = []
+    search = "%{}%".format(dish)
+    for i in Recipe.query.filter(Recipe.name.like(search)).all():
+        shortList.append(i)
+
+    result = set()
+
+    for i in shortList :
+        result.add(i)
+    
+    ing_set = set(ingredients)
+
+    for recipe in result :
+        sub_set = set()
+        for ing in recipe.ingredients :
+            subset.add(ing.name)
+
+        if not sub_set.issubset(ing_set) :
+            result.remove(recipe)
+    
+    ans = list(result)
+
+    if typeOfSearch == 'like' :
+        ans.sort(key=likeKey, reverse=True)
+        print(ans)
+        return ans
+    else :
+        ans.sort(key=alphaKey)
+        print(ans)
+        return ans
+
