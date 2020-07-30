@@ -1,6 +1,6 @@
 {% for recipe in recipes %}
-
-<div class="card bg-light">
+<div class="col-sm-4">
+<div class="card bg-light mx-0 my-2 shadow">
   <img class="card-img-top p-2" src="{{ url_for('static', filename='images/recipe_pics/' + recipe['recipe'].image_file) }}" alt="Card image cap">
   
     <h4 class="card-title px-2"><div class="p-2 bg-white">{{ recipe['recipe'].name }}</div></h4>
@@ -58,5 +58,6 @@
       </div>
     </div>
   </div>
+</div>
 </div>
   {% endfor %}

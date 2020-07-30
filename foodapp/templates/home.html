@@ -13,15 +13,15 @@
 <br>
 <div class="row">
   <div class="col col-md-6 col-sm-12">
-    <p>Please select search type :</p>
+    <p class="my-0">Search by:</p>
     <label for="ing">Ingredients</label>
-    <input type="radio" id="ing_radio" name="search_type_selection" value="Ingredients" checked="checked"><br>
+    <input type="radio" id="ing_radio" name="search_type_selection" value="Ingredients" checked="checked">
     <label for="dish">Dish</label>
     <input type="radio" id="dish_radio" name="search_type_selection" value="Dish">
   </div>
-  <div class="col col-md-6 col-sm-12">
-    <p>Please select sort type :</p>
-    <select id="sort_by" onchange="recipeFilter()">
+ 
+  <div class="col col-md-6 col-sm-12 text-right">
+    <select class="custom-select w-50" id="sort_by" onchange="recipeFilter()">
       <option value="like" selected="selected">Sort by like</option>
       <option value="alpha">Sort in alphabetical order</option>
     </select>
@@ -38,9 +38,7 @@
 <div id="filterlist" class="row pt-2">
 
 </div>
-
-<br><br>
-<div id="recipe_list" class="card-columns">
+<div id="recipe_list" class="card-deck">
 
 </div>
 {% endblock %}
