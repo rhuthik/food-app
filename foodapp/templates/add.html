@@ -22,7 +22,7 @@
         }
 
         function addButton(){
-            new_ingredient = $('#searchbox_ing').val();
+            new_ingredient = $('#searchbox_ing_add').val();
 
             if(!ingredients_list.includes(new_ingredient)){
                 ingredients_list.push(new_ingredient);
@@ -33,9 +33,9 @@
         }
 
         $(document).ready(function(){
-            $('#searchbox_ing').keyup(function(){
+            $('#searchbox_ing_add').keyup(function(){
               req = $.ajax({
-                data : { 'search' : $('#searchbox_ing').val() },
+                data : { 'search' : $('#searchbox_ing_add').val() },
                 type : 'POST',
                 url : '{{ url_for('ingredientsearch') }}'
               });
@@ -76,7 +76,7 @@
                 Ingredients : <br>
                 <div class="dropdown">
                     <div class="input-group mb-3">
-                        <input id="searchbox_ing" type="text" class="form-control" placeholder="Ingredient" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <input id="searchbox_ing_add" type="text" class="form-control" placeholder="Ingredient" aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <input type="radio" id="ing_radio" name="search_type_selection" value="Ingredients" checked="checked">
                         <div class="input-group-append">
                           <button type="button" id="addBtn" class="btn btn-outline-secondary" onclick="addButton()">Add</button>
