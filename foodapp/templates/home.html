@@ -21,10 +21,10 @@
   </div>
   <div class="col col-md-6 col-sm-12">
     <p>Please select sort type :</p>
-    <label for="like">Sort by likes</label>
-    <input type="radio" id="like_sort_radio" onclick="recipeFilter('like')" name="sort_type_selection" value="likeSort" checked="checked"><br>
-    <label for="alpha">Sort in alphabetical order</label>
-    <input type="radio" id="alpha_sort_radio" onclick="recipeFilter('alpha')" name="sort_type_selection" value="alphaSort">
+    <select id="sort_by" onchange="recipeFilter()">
+      <option value="like" selected="selected">Sort by like</option>
+      <option value="alpha">Sort in alphabetical order</option>
+    </select>
   </div>
 </div>
 

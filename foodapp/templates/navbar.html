@@ -14,7 +14,7 @@
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Me
+          <img width="30" height="30" class="rounded" src="{{ url_for('static', filename='images/pro_pics/' + user.propic) }}"> {{ user.username }}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="{{ url_for('account') }}">my Account</a>

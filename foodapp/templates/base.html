@@ -75,7 +75,11 @@
 
     }
 
-    function recipeFilter(typeOfSearch) {
+    function recipeFilter() {
+
+      var e = document.getElementById('sort_by');
+      var sort_type = e.options[e.selectedIndex].value;
+
       dishname = '';
       if(document.getElementById('dish_radio').checked == true){
         dishname = $('#searchbox_ing').val();
@@ -85,7 +89,7 @@
         $('#filterlist').append('<span class="badge-lg badge-pill badge-secondary">' + ingredients_list[j] + '   <button name="' + ingredients_list[j] + '" onclick="removeIngredient(this) " class="close ml-3 text-white"><span aria-hidden="true">&times;</span></button></span>');
       }
 
-      requ = $.post("{{ url_for('filteredrecipe') }}", { 'dish' : dishname, 'info[]': ingredients_list, 'type': typeOfSearch });
+      requ = $.post("{{ url_for('filteredrecipe') }}", { 'dish' : dishname, 'info[]': ingredients_list, 'type': sort_type });
 
       requ.done(function (data) {
         console.log(data.result);
@@ -117,8 +121,8 @@
       });
 
       function callOnKeyup() {
+
         if (document.getElementById('ing_radio').checked == true) {
-          if (document.getElementById('like_sort_radio').checked == true) {
             req = $.ajax({
               data: { 'search': $('#searchbox_ing').val() },
               type: 'POST',
@@ -142,54 +146,17 @@
                     for (var j = 0; j < ingredients_list.length; j++) {
                       $('#filterlist').append('<span class="card bg-primary"><div class="card-body text-center">' + ingredients_list[j] + ' <a name="' + ingredients_list[j] + '" onclick="removeIngredient(this)">X</a></div></span>');
                     }
-                    recipeFilter('like');
+                    recipeFilter();
                   }
                 });
 
                 document.getElementById('cont_ing').appendChild(btn);
               }
             });
-          }
-          else if (document.getElementById('alpha_sort_radio').checked == true) {
-            req = $.ajax({
-              data: { 'search': $('#searchbox_ing').val() },
-              type: 'POST',
-              url: '{{ url_for('ingredientsearch') }}'
-          });
-
-            req.done(function (data) {
-              $('#cont_ing').html('');
-              for (var i = 0; i < data['result'].length; i++) {
-                var btn = document.createElement("A");
-                btn.classList.add("dropdown-item");
-                btn.href = "#";
-                btn.innerHTML = data['result'][i];
-
-                btn.addEventListener('click', function () {
-                  if (!ingredients_list.includes(this.innerHTML)) {
-                    ingredients_list.push(this.innerHTML);
-                    console.log(ingredients_list);
-
-                    $('#filterlist').html('');
-                    for (var j = 0; j < ingredients_list.length; j++) {
-                      $('#filterlist').append('<span class="card bg-primary"><div class="card-body text-center">' + ingredients_list[j] + ' <a name="' + ingredients_list[j] + '" onclick="removeIngredient(this)">X</a></div></span>');
-                    }
-                    recipeFilter('alpha');
-                  }
-                });
-
-                document.getElementById('cont_ing').appendChild(btn);
-              }
-            });
-          }
+          
         }
         else if (document.getElementById('dish_radio').checked == true) {
-          if(document.getElementById('like_sort_radio').checked == true){
-            recipeFilter('like')
-          }
-          else if(document.getElementById('alpha_sort_radio').checked == true){
-            recipeFilter('alpha')
-          }
+            recipeFilter()
         }
       }
 

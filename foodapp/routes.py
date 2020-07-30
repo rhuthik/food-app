@@ -28,6 +28,7 @@ def reg():
 @app.route("/login", methods=['POST', 'GET'])
 def login():
     if current_user.is_authenticated :
+        flash('Login successfull, Welcome '+User.query.get(current_user.get_id()).username, 'success')
         return redirect(url_for('home'))
     else :
         form = LoginForm()
@@ -51,8 +52,7 @@ def home():
     if current_user.is_authenticated :
         if User.query.get(current_user.get_id()).isEmailVerified == True :
             recipes = Recipe.query.all()
-            flash('Welcome ' + User.query.get(current_user.get_id()).username +' !', 'success')
-            return render_template('home.html')
+            return render_template('home.html', user=User.query.get(current_user.get_id()))
         else :
             return redirect(url_for('emailverify'))
     else :
@@ -104,7 +104,7 @@ def add():
                         
 
                 return redirect(url_for('add'))
-            return render_template('add.html', form=form)
+            return render_template('add.html', form=form, user=User.query.get(current_user.get_id()))
         else :
             return redirect(url_for('emailverify'))
     else :
@@ -364,6 +364,7 @@ def verifyEmail(token) :
     User.query.get(current_user.get_id()).isEmailVerified = True
     db.session.commit()
     flash('Email has verified', 'dark')
+    flash('Welcome '+User.query.get(current_user.get_id()), 'success')
     return redirect(url_for('home'))
 
 @app.route('/users/<username>')
@@ -395,7 +396,7 @@ def otherAccount(username) :
                 sub_rec['dislikes'] = len(recipe.users_disliked)
                 passing_recipes.append(sub_rec)
 
-        return render_template('otheraccount.html', recipes_authored=passing_recipes, isFollowing=isFollowing, user=user, totalLikesRecieved=totalLikesRecieved)
+        return render_template('otheraccount.html', recipes_authored=passing_recipes, isFollowing=isFollowing, user=User.query.get(current_user.get_id()), otheruser=user, totalLikesRecieved=totalLikesRecieved)
 
 @app.route('/follow', methods=['POST', 'GET'])
 def followUser() :

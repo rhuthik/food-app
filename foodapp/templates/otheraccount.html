@@ -1,7 +1,7 @@
 {% extends "base.html" %}
   
   {% block TITLE %}
-<title>my account:{{ user.username }}</title>
+<title>{{ otheruser.username }}</title>
   {% endblock %}
 
   {% block content%}
@@ -10,23 +10,23 @@
     <div class="text-center">
       <img src="{{ url_for('static', filename='images/pro_pics/' + user.propic) }}" class="rounded" alt="...">
       <br>
-      <b>{{ user.username }}</b>
+      <b>{{ otheruser.username }}</b>
       <br>
       {% if isFollowing %}
-        <button id="user{{ user.username }}" type="button" class="btn btn-primary" onclick="followUser('{{ user.username }}')">Unfollow</button>
+        <button id="user{{ otheruser.username }}" type="button" class="btn btn-primary" onclick="followUser('{{ otheruser.username }}')">Unfollow</button>
       {% else %}
-        <button id="user{{ user.username }}" type="button" class="btn btn-primary" onclick="followUser('{{ user.username }}')">Follow</button>
+        <button id="user{{ otheruser.username }}" type="button" class="btn btn-primary" onclick="followUser('{{ otheruser.username }}')">Follow</button>
       {% endif %}
       <hr>
       <h6><b>
       <div class="row mx-5 p-3">
         <div class="col">
           Followers<br>
-          {{ user.followers.all()|length }}
+          {{ otheruser.followers.all()|length }}
         </div>
         <div class="col">
           Following<br>
-          {{ user.followed.all()|length }}
+          {{ otheruser.followed.all()|length }}
         </div>
       </div>
       </b></h6>
@@ -37,7 +37,7 @@
         Email id:
       </div>
       <div class="col">
-        {{ user.email }}
+        {{ otheruser.email }}
       </div>
     </div>
     <div class="row p-3">
@@ -45,7 +45,7 @@
         Number of recipies uploaded:
       </div>
       <div class="col">
-        {{ user.recipes_authored|length }}
+        {{ otheruser.recipes_authored|length }}
       </div>
     </div>
     <div class="row p-3">
