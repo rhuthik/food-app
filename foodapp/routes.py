@@ -364,7 +364,6 @@ def verifyEmail(token) :
     User.query.get(current_user.get_id()).isEmailVerified = True
     db.session.commit()
     flash('Email has verified', 'dark')
-    flash('Welcome '+User.query.get(current_user.get_id()), 'success')
     return redirect(url_for('home'))
 
 @app.route('/users/<username>')
