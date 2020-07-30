@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <script>
     var ingredients_list = [];
@@ -33,16 +34,16 @@
       req.done(function (data) {
         if (ele.style.backgroundColor != 'white') {
           ele.style.backgroundColor = 'white';
-          ele.innerHTML = 'Like ' + data['like'];
+          ele.innerHTML = '<i class="fa fa-thumbs-up" aria-hidden="true"></i> ' + data['like'];
         }
         else {
           ele.style.backgroundColor = '#0099cc';
-          ele.innerHTML = 'Like ' + data['like'];
+          ele.innerHTML = '<i class="fa fa-thumbs-up" aria-hidden="true"></i> ' + data['like'];
         }
 
         if (data['turnotheroff']) {
           document.getElementById('dislikeBut' + ele.name).style.backgroundColor = 'white';
-          document.getElementById('dislikeBut' + ele.name).innerHTML = 'Dislike ' + data['dislike'];
+          document.getElementById('dislikeBut' + ele.name).innerHTML = '<i class="fa fa-thumbs-down" aria-hidden="true"></i> ' + data['dislike'];
         }
       });
     }
@@ -57,16 +58,16 @@
       req.done(function (data) {
         if (ele.style.backgroundColor != 'white') {
           ele.style.backgroundColor = 'white';
-          ele.innerHTML = 'Dislike ' + data['dislike'];
+          ele.innerHTML = '<i class="fa fa-thumbs-down" aria-hidden="true"></i> ' + data['dislike'];
         }
         else {
           ele.style.backgroundColor = 'red';
-          ele.innerHTML = 'Dislike ' + data['dislike'];
+          ele.innerHTML = '<i class="fa fa-thumbs-down" aria-hidden="true"></i> ' + data['dislike'];
         }
 
         if (data['turnotheroff']) {
           document.getElementById('likeBut' + ele.name).style.backgroundColor = 'white';
-          document.getElementById('likeBut' + ele.name).innerHTML = 'Like ' + data['like'];
+          document.getElementById('likeBut' + ele.name).innerHTML = '<i class="fa fa-thumbs-up" aria-hidden="true"></i> ' + data['like'];
         }
       });
     }
